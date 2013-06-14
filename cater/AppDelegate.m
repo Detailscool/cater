@@ -24,6 +24,9 @@
     
     [application setStatusBarHidden:NO];
     [application setStatusBarStyle:UIStatusBarStyleBlackOpaque];
+    
+    
+    
     self.navigationController.navigationBar.barStyle = UIBarStyleBlackOpaque;
     self.window.rootViewController = _navigationController;
     

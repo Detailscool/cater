@@ -8,9 +8,11 @@
 
 #import "ClassicDishController.h"
 #import "UIViewController+Strong.h"
+#import "NSString+Strong.h"
 #import "UserDataManager.h"
 #import "ShowImageController.h"
 #import "RecognizerUtil.h"
+#import "UIViewController+Second.h"
 #import <QuartzCore/QuartzCore.h>
 @interface ClassicDishController (){
     
@@ -22,6 +24,12 @@
     UIButton *arrowLeft;
     
     UIButton *arrowRight;
+    //介绍内容
+    UITextView *textView;
+    //菜品名称
+    UILabel *caterName;
+    //菜品价格
+    UILabel *caterPrice;
     int totalCount;
 }
 @end
@@ -31,61 +39,91 @@
 -(void)afterLoadView{
     [super afterLoadView];
     totalCount = 6;
-    //菜品介绍
-    NSString *introduce = @"俏江南LOGO中的脸谱取自于川剧变脸人物刘宗敏，他是李自成手下的大将军，勇猛彪捍，机智过人，被民俏江南LOGO[1]间百姓誉为武财神，寓意招财进宝，驱恶辟邪，而俏江南选用经过世界著名平面设计大师再创作的此脸谱为公司LOGO，旨在用现代的精神去继承和光大中国五千年悠久的美食文化，并在公司成长过程中通过智慧，勇气，意志力去打造中国餐饮行业的世界品牌。";
-    if (introduce.length > ZERO) {
-        if (introduce.length > LABEL_TEXT_MAX_LENGTH - 3) {
-            introduce = [introduce substringToIndex:LABEL_TEXT_MAX_LENGTH - 3];
-            _cpIntroduce.text = [NSString stringWithFormat:@"介绍：%@",introduce];
-        }else {
-            _cpIntroduce.text = introduce;
-        }
-    } else {
-        int _cpIntroduceY = _cpIntroduce.frame.origin.y;
-        //上移 “加入购物车”
-        CGRect btnFrame = _addBtn.frame;
-        btnFrame.origin.y = _cpIntroduceY;
-        _addBtn.frame = btnFrame;
-        //上移 pageController
-        CGRect pageFrame = _pageController.frame;
-        pageFrame.origin.y -= _cpIntroduce.frame.size.height;
-        _pageController.frame = pageFrame;
-        
-        [_cpIntroduce removeFromSuperview];
-        _cpIntroduce = nil;
-    }
-    int buttonWidth = 250;
-    int buttonHeight = 200;
+    int buttonHeight = _scrollView.frame.size.height;
     int paddingX = 0;
-    
     //添加菜品
     for (int index = 0; index < totalCount; index ++) {
         CGRect frame = CGRectMake(index * (IPHONE_WIDTH + paddingX), ZERO, IPHONE_WIDTH, buttonHeight);
-        UIButton *bigButton = [self createButton:frame title:nil normalImage:nil hightlightImage:nil controller:nil selector:nil tag:-1];
-        NSString *imagePath = nil;
-        if (index%2 == 0) {
-            imagePath = @"dish";
-        } else {
-            imagePath = @"cpsuggest";
-        }
-        frame = CGRectMake((IPHONE_WIDTH - buttonWidth)/2, ZERO, buttonWidth, buttonHeight);
+        NSString *imagePath = index%2 == 0?@"dish":@"cpsuggest";
         UIButton *button = [self createButton:frame title:nil normalImage:imagePath hightlightImage:nil controller:self selector:@selector(buttonClick:) tag:index];
-        [bigButton addSubview:button];
-        
-        [_scrollView addSubview:bigButton];
+        [_scrollView addSubview:button];
     }
     _scrollView.bounces = NO;
     _scrollView.showsHorizontalScrollIndicator = NO;
     _scrollView.contentSize = CGSizeMake(totalCount*IPHONE_WIDTH+totalCount*paddingX, _scrollView.frame.size.height - BAR_HEIGHT);
     
     //创建方向箭头
-    CGRect frame = CGRectMake(ZERO,75,27, 45);
+    CGRect frame = CGRectMake(ZERO,(buttonHeight - 90)/2,27, 45);
     arrowLeft = [self createButton:frame title:nil normalImage:@"arrow_left" hightlightImage:nil controller:self selector:@selector(buttonClick:) tag:ZERO];
     [self.view addSubview:arrowLeft];
     
     frame.origin.x += IPHONE_WIDTH - frame.size.width;
     arrowRight = [self createButton:frame title:nil normalImage:@"arrow_right" hightlightImage:nil controller:self selector:@selector(buttonClick:) tag:ZERO];
     [self.view addSubview:arrowRight];
+    
+    
+    
+    CGRect btnFrame = CGRectMake(ZERO, _scrollView.frame.size.height-BAR_HEIGHT, IPHONE_WIDTH, 104);
+    UIButton *button4bg = [self createButton:btnFrame title:nil normalImage:@"jj_classic_dish_button_bg" hightlightImage:@"jj_classic_dish_button_bg" controller:nil selector:nil tag:ZERO];
+    
+    btnFrame = CGRectMake((IPHONE_WIDTH - 284)/2,10 ,284, 42);
+    //加入购物车按钮
+    self.addBtn = [self createButton:btnFrame title:nil normalImage:@"jj_add_car_normal_button" hightlightImage:@"jj_add_car_pressed_button" controller:self selector:@selector(buttonClick:) tag:ZERO];
+    [button4bg addSubview:_addBtn];
+    
+    //pageController
+    btnFrame.origin.y += btnFrame.size.height + 5;
+    self.pageController = [[[ UIPageControl alloc] initWithFrame:btnFrame] autorelease];
+    _pageController.numberOfPages = totalCount;
+    _pageController.currentPage = ZERO;
+    _pageController.pageIndicatorTintColor = [UIColor blackColor];
+    [_pageController addTarget:self action:@selector(changePage:) forControlEvents:UIControlEventValueChanged];
+    [button4bg addSubview:_pageController];
+    [self.view addSubview:button4bg];
+    
+    //菜品名称，菜品价格，菜品介绍
+    CGRect bgFrame = CGRectMake(ZERO,_scrollView.frame.size.height-150, IPHONE_WIDTH, 106);
+    //设置了alpha的view
+    UIView *bgView = [[[ UIView alloc] initWithFrame:bgFrame] autorelease];
+    bgView.alpha = 0.5;
+    bgView.backgroundColor = [UIColor whiteColor];
+    
+    //透明的view
+    UIView *bgViewBg = [[[ UIView alloc] initWithFrame:bgView.frame] autorelease];
+    bgViewBg.backgroundColor = [UIColor clearColor];
+    
+    //菜品介绍
+    int labelHeight = 21;
+    UILabel *caterInfo = [self createLabel:CGRectMake(20, 5, 100, labelHeight) text:@"菜品介绍:" bgColor:[UIColor clearColor] alignment:NSTextAlignmentLeft font:GLOBAL_FONT line:1];
+    caterInfo.textColor = [UIColor blackColor];
+    [bgViewBg addSubview:caterInfo];
+    
+    //介绍内容
+    textView=[[[UITextView alloc] initWithFrame:CGRectMake(20,labelHeight+3,IPHONE_WIDTH - 40, bgViewBg.frame.size.height - 2*labelHeight)] autorelease];
+    textView.editable = NO;
+    textView.text = @"俏江南LOGO中的脸谱取自于川剧变脸人物刘宗敏，他是李自成手下的大将军，勇猛彪捍，机智过人，被民俏江南LOGO[1]间百姓誉为武财神，寓意招财进宝，驱恶辟邪，而俏江南选用经过世界著名平面设计大师再创作的此脸谱为公司LOGO，旨在用现代的精神去继承和光大中国五千年悠久的美食文化，并在公司成长过程中通过智慧，勇气，意志力去打造中国餐饮行业的世界品牌。";
+    [textView.layer setShadowColor:[UIColor whiteColor].CGColor];
+    [textView.layer setShadowOffset:CGSizeMake(.6, .6)];
+    [textView setBackgroundColor:[UIColor clearColor]];
+    [textView setFont:GLOBAL_FONT];
+    [bgViewBg addSubview:textView];
+    
+    
+    //菜品名称
+    caterName = [self createLabel:CGRectMake(20, labelHeight+textView.frame.size.height +3, 100, labelHeight) text:@"菜品名称" bgColor:[UIColor clearColor] alignment:NSTextAlignmentLeft font:GLOBAL_FONT line:1];
+    caterName.textColor = [UIColor blackColor];
+    [bgViewBg addSubview:caterName];
+    
+    //菜品价格
+    frame = caterName.frame;
+    frame.origin.x += 200;
+    caterPrice = [self createLabel:frame text:@"100 元" bgColor:[UIColor clearColor] alignment:NSTextAlignmentLeft font:GLOBAL_FONT line:1];
+    caterPrice.textColor = [UIColor blackColor];
+    [bgViewBg addSubview:caterPrice];
+    
+    
+    [self.view addSubview:bgView];
+    [self.view addSubview:bgViewBg];
     
     [self addObserver:self forKeyPath:@"currentIndex" options:NSKeyValueObservingOptionNew |NSKeyValueObservingOptionNew context:nil];
     self.currentIndex = ZERO;
@@ -203,10 +241,8 @@
     [self.navigationController pushViewController:[self getControllerFromClass:@"BuyCarController" title:@"购物车"] animated:YES];
 }
 - (void)dealloc {
+    [self removeObserver:self forKeyPath:@"currentIndex"];
     [_scrollView release];
-    [_cpName release];
-    [_cpPrice release];
-    [_cpIntroduce release];
     [_addBtn release];
     [_pageController release];
     [super dealloc];

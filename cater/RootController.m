@@ -14,6 +14,7 @@
 #import "AppDelegate.h"
 #import "NSString+Strong.h"
 #import <QuartzCore/QuartzCore.h>
+#define kSCNavBarImageTag 10
 @interface RootController ()
 
 @end
@@ -21,11 +22,15 @@
 @implementation RootController
 - (void) afterLoadView{
     self.showToolBar = YES;
-    self.title = PROJECT_NAME;
     [super afterLoadView];
-    self.tableView.separatorColor = [UIColor redColor];
+    [self setNavbarBackgroudImage];
+    
+    
+    UILabel *titleView = [self createLabel:CGRectMake(ZERO, ZERO, 100, BAR_HEIGHT) text:PROJECT_NAME bgColor:[UIColor clearColor] alignment:NSTextAlignmentCenter font:[UIFont boldSystemFontOfSize:20] line:1];
+    titleView.textColor = [UIColor whiteColor];
+    self.navigationItem.titleView = titleView;
     //商家logo
-    UIButton *infoBtn = [self createButton:CGRectMake(0, 0, 55, 35) title:nil normalImage:@"cateLogo" hightlightImage:@"cateLogo" controller:nil selector:nil tag:ZERO];
+    UIButton *infoBtn = [self createButton:CGRectMake(20,5, 35, 35) title:nil normalImage:@"jj_logo" hightlightImage:@"jj_logo" controller:nil selector:nil tag:ZERO];
     infoBtn.layer.cornerRadius = 5.0f;
     infoBtn.layer.masksToBounds = YES;
     
@@ -35,6 +40,7 @@
     
     //底部导航栏
     PageBar *pageBar = [[PageBar alloc] initWithY:self.contentHeight controller:self];
+    [pageBar setBackgroundImage:[UIImage imageWithContentsOfFile:[@"jj_toolbar" imageFullPath]] forToolbarPosition:UIToolbarPositionAny barMetrics:UIBarMetricsDefault];
     [self.view addSubview:pageBar];
     [pageBar release];
     
@@ -54,13 +60,6 @@
 }
 //监听设置按钮
 - (void)barItemClick:(UIButton *)button {
-//    SettinController *settingController = [[SettinController alloc] init];
-//    UINavigationController *navController = [[UINavigationController alloc] initWithRootViewController:settingController];
-//    navController.navigationBar.barStyle = UIBarStyleBlackOpaque;
-//    [self presentViewController:navController animated:YES completion:nil];
-//    [settingController release];
-//    [navController release];
-    
     [self.navigationController pushViewController:[self getControllerFromClass:@"SettinController" title:SETTING] animated:YES];
 }
 
@@ -84,20 +83,25 @@
     
     int row = indexPath.row;
     NSString *imagePath = nil;
+    NSString *smallImagePath = nil;
     if (row == 0) {
         imagePath =  @"bookCater";
+        smallImagePath = @"jj_book_cater_button";
     } else  if (row == 1) {
         imagePath =  @"cpsuggest";
+        smallImagePath = @"jj_cp_remand_button";
     } else  if (row == 2) {
         imagePath =  @"tgou";
+        smallImagePath = @"jj_tuan_gou_button";
     } else  if (row == 3) {
         imagePath =  @"userdata";
+        smallImagePath = @"jj_user_info_button";
     }
     UIButton *button = [self createButton:cell.bounds title:nil normalImage:imagePath hightlightImage:nil controller:self selector:@selector(buttonClick:) tag:BUTTON_TAG];
     
-    NSString *text = [[self buttonArray] objectAtIndex:row];
-    UIButton *smallButton = [self createButton:CGRectMake(button.frame.size.width - 80,button.frame.size.height - 30 , 80, 30) title:text normalImage:nil hightlightImage:nil controller:self selector:@selector(smallButtonClick:) tag:ZERO];
-    smallButton.backgroundColor = [UIColor redColor];
+//    NSString *text = [[self buttonArray] objectAtIndex:row];
+    UIButton *smallButton = [self createButton:CGRectMake(ZERO,button.frame.size.height - 26 ,IPHONE_WIDTH, 26) title:nil normalImage:smallImagePath hightlightImage:nil controller:self selector:@selector(smallButtonClick:) tag:ZERO];
+    smallButton.backgroundColor = [UIColor clearColor];
     smallButton.titleLabel.font = [UIFont fontWithName:@"Arial-BoldMT" size:15];
     [button addSubview:smallButton];
     [cell.contentView addSubview:button];
@@ -147,6 +151,24 @@
             break;
     }
      [self.navigationController pushViewController:[self getControllerFromClass:controllerString title:title] animated:YES];
+}
+//设置导航栏背景
+-(void)setNavbarBackgroudImage{
+    UINavigationBar *navBar = self.navigationController.navigationBar;
+    //if iOS 5.0 and later
+    if ([navBar respondsToSelector:@selector(setBackgroundImage:forBarMetrics:)])
+    {
+        [navBar setBackgroundImage:[UIImage imageWithContentsOfFile:[@"jj_navbar" imageFullPath]] forBarMetrics:UIBarMetricsDefault];
+    }else{
+        UIImageView *imageView = (UIImageView *)[navBar viewWithTag:kSCNavBarImageTag];
+        if (imageView == nil){
+            imageView = [[UIImageView alloc] initWithImage:
+                        [UIImage imageWithContentsOfFile:[@"jj_navbar" imageFullPath]]];
+            [imageView setTag:kSCNavBarImageTag];
+            [navBar insertSubview:imageView atIndex:0];
+            [imageView release];
+        }
+    }
 }
 -(void)barButtonItemClick:(UIBarButtonItem *)item{
     [self.navigationController popViewControllerAnimated:YES];

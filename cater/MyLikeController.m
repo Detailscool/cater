@@ -1,14 +1,14 @@
 //
-//  TestListController.m
+//  MyLikeController.m
 //  cater
 //
-//  Created by jnc on 13-6-7.
+//  Created by jnc on 13-6-14.
 //  Copyright (c) 2013年 jnc. All rights reserved.
 //
 
-#import "TestListController.h"
-#import "UIViewController+Second.h"
+#import "MyLikeController.h"
 #import "NewBaseListController+Second.h"
+#import "UIViewController+Second.h"
 #import "CellItemView.h"
 #import <QuartzCore/QuartzCore.h>
 #define NAME @"name"
@@ -19,15 +19,15 @@
 #define time_tag 36
 #define mobile_phone_tag 37
 #define Photo_Ratio 5.0f/7.0f
-@interface TestListController ()
+@interface MyLikeController ()
 
 @end
 
-@implementation TestListController
+@implementation MyLikeController
 
 #pragma mark - 实现父类的方法
 - (NSString *)pageDataSize {
-    return @"10";
+    return @"30";
 }
 #pragma mark 创建itemView
 - (CellItemView *)initCellItemView:(int)col itemWidth:(CGFloat)itemWidth {
@@ -71,11 +71,12 @@
     [self createSperatorLine:CGRectMake(ZERO,itemHeight - 1, itemWidth, 1) parentView:item];
     return item;
 }
--(void)itemClick:(CellItemView *)itemView{
 
+-(void)itemClick:(CellItemView *)itemView{
+    
 }
 -(void)photoClick:(UIButton *)button{
-
+    
 }
 
 #pragma mark 数据对应接口
@@ -94,5 +95,4 @@
 // 初始化完一个数据
 - (void)afterInitData:(NSInteger)index dictionary:(NSMutableDictionary *)dictionary itemView:(CellItemView *)itemView{
     
-}
-@end
+}@end

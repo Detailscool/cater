@@ -13,12 +13,15 @@
 @interface RegisterController (){
     NSMutableArray *data;
     MyUITableView *myTableView;
+    
 }
 @end
 
 @implementation RegisterController
+@synthesize fields = _fields;
 - (void)afterLoadView{
     [super afterLoadView];
+    self.fields = [[[NSMutableDictionary alloc] initWithCapacity:10] autorelease];
     //取消
     UIBarButtonItem *cancelBtn = [[UIBarButtonItem alloc] initWithTitle:@"取消" style:UIBarButtonItemStylePlain target:self action:@selector(barButtonItemClick:)];
     cancelBtn.tag = CANCEL_BTN_TAG;
@@ -44,8 +47,10 @@
 }
 //创建UITableViewCell的子控件
 -(void) createChildView4Cell:(UITableViewCell *)cell indexPath:(NSIndexPath *)indexPath{
-    UITextField *textField = [self createTextField:CGRectMake(95, ZERO, cell.frame.size.width-100, cell.frame.size.height) text:@"" tag:indexPath.row+MAX_TAG font:GLOBAL_FONT];
     int row = indexPath.row;
+    UITextField *textField = [self createTextField:CGRectMake(95, ZERO, cell.frame.size.width-100, cell.frame.size.height) text:@"" tag:row+MAX_TAG font:GLOBAL_FONT];
+    textField.delegate = self;
+    [_fields setValue:textField forKey:int2str(textField.tag)];
     if (row == 0) {
         textField.placeholder = @"中英文或数字";
     } else if(row == 1){
@@ -55,7 +60,17 @@
         textField.placeholder = @"6至18位数字或字母组合";
     } else if(row == 3){
         textField.placeholder = @"";
+        textField.returnKeyType = UIReturnKeyDone;
+        [cell addSubview:textField];
+        
+        //发送验证码
+        CGRect frame = CGRectMake(textField.frame.origin.x + textField.frame.size.width-90,7,70, BAR_HEIGHT-14);
+        UIButton *button = [self createButton:frame title:@"获取验证码" normalImage:@"btn_pressed" hightlightImage:nil controller:self selector:@selector(barButtonItemClick:) tag:ZERO];
+        button.titleLabel.font = [UIFont fontWithName:@"CourierNewPSMT" size:14];
+        [cell addSubview:button];
+        return;
     }
+    textField.returnKeyType = UIReturnKeyNext;
     [cell addSubview:textField];
 }
 //监听barButton
@@ -69,7 +84,40 @@
         } else if (tag == CONFORM_BTN_TAG){ //完成
             
         }
+    } else if([item isKindOfClass:UIButton.class]){ //获取验证码
+        
+//        NSString *mp=@"13554867904";
+//        NSMutableDictionary *form=[NSMutableDictionary dictionaryWithObjectsAndKeys:mp,@"mobilePhone", nil];
+//        [WebController post:@"login_sendAuthCode" tag:SEND_AUTH_CODE title:@"正在获取验证码..." form:form controller:self];
+    }
+}
+#pragma mark - text field delegete方法
+- (BOOL)textFieldShouldReturn:(UITextField *)textField{
+    UIReturnKeyType type = textField.returnKeyType;
+    if (type == UIReturnKeyNext) { //跳到下一项
+        int tag = textField.tag+1;
+        UITextField *field = [_fields objectForKey:int2str(tag)];
+        [field becomeFirstResponder];
+    } else { //发请求注册
+        UITextField *field = [_fields objectForKey:int2str(textField.tag)];
+        [field resignFirstResponder];
+    }
+    return YES;
+}
+#pragma mark - 网络代理
+- (void)successWithTag:(int)tag andJson:(NSDictionary *)json{
+    if (tag==SEND_AUTH_CODE) { //获取验证码成功
+        NSLog(@"json = %@",json);
+    }
+} 
+- (void)failureWithTag:(int)tag andJson:(NSDictionary *)json{
+    if (tag==SEND_AUTH_CODE) { //获取验证码失败
+        
     }
 }
 
+-(void)dealloc{
+    [_fields release];
+    [super dealloc];
+}
 @end

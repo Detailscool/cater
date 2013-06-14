@@ -8,6 +8,6 @@
 
 #import "BaseViewController.h"
 
-@interface RegisterController : BaseViewController
-
+@interface RegisterController : BaseViewController<UITextFieldDelegate>
+@property (nonatomic,retain)NSMutableDictionary *fields;
 @end

@@ -30,7 +30,7 @@
 }
 - (void)afterLoadView {
     // 确定tableView的尺寸
-    self.tableViewFrame = CGRectMake(0, ZERO, self.view.frame.size.width, self.view.frame.size.height);
+    self.tableViewFrame = CGRectMake(0, ZERO, self.view.frame.size.width, self.view.frame.size.height-BAR_HEIGHT);
     [super afterLoadView];
 }
 - (void)viewDidLoad {
@@ -38,11 +38,11 @@
     // 刷新数据
     [self reloadData];
     // 设置没有分割线
-    self.tableView.separatorStyle = UITableViewCellSeparatorStyleSingleLine;
-    // 设置分割线颜色
-    self.tableView.separatorColor = SEPERATION_COLOR;
+    self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+//    // 设置分割线颜色
+//    self.tableView.separatorColor = SEPERATION_COLOR;
     // 设置背景颜色
-    self.tableView.backgroundColor = kGlobalBackgroundColor;
+    self.tableView.backgroundColor = [UIColor clearColor];
 }
 #pragma mark 释放内存
 - (void)viewDidUnload {

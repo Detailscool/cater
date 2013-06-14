@@ -8,6 +8,6 @@
 
 #import "BaseViewController.h"
 
-@interface SuggestionController : BaseViewController
-
+@interface SuggestionController : BaseViewController<UITextViewDelegate>
+@property (nonatomic,copy)NSString *lastContent;
 @end

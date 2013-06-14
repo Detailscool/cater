@@ -70,7 +70,7 @@
     if (section == ZERO) {
         return 40;
     }
-    return 20;
+    return 10;
 }
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {

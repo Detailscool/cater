@@ -8,6 +8,6 @@
 
 #import "BaseViewController.h"
 
-@interface UserDataController : BaseViewController<UITableViewDataSource,UITableViewDelegate>
-
+@interface UserDataController : BaseViewController<UITableViewDataSource,UITableViewDelegate,UITextFieldDelegate>
+@property (nonatomic,retain)NSMutableDictionary *fields;
 @end

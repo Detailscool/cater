@@ -65,3 +65,7 @@
 #define MOBILE_PHONE_TAG 36
 
 #define KEYBOARD_HEIGHT 216
+
+#define SAVE_TAG 37
+
+#define SEND_AUTH_CODE 38 

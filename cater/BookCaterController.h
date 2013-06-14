@@ -18,5 +18,6 @@
 //经典菜品
 @property (retain, nonatomic) IBOutlet UIButton *ClassicBtn;
 - (IBAction)buttonClick:(id)sender;
+@property (retain, nonatomic) IBOutlet UIButton *classicLabel;
 
 @end

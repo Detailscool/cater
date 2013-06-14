@@ -102,5 +102,11 @@
 //    [self.navigationController presentModalViewController:nc animated:NO];
 //    [photoCropper release];
 //}
-
+-(UIView *)createSperatorLine:(CGRect)frame parentView:(UIView *)parentView{
+    UIView *view = [[UIView alloc] initWithFrame:frame];
+    view.backgroundColor = SEPERATION_COLOR;
+    [parentView addSubview:view];
+    [view release];
+    return view;
+}
 @end

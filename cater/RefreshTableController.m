@@ -56,7 +56,6 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
     if (self.tableViewFrame.size.width <= 0) {
         self.tableViewFrame = CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height);
     }
@@ -67,8 +66,6 @@
     self.tableView.delegate = self;
     //设置UITableView的数据来源
     self.tableView.dataSource = self;
-    //设置UITableView的背景
-    self.tableView.backgroundColor = [UIColor whiteColor];
     [self.view addSubview:self.tableView];
     
     // 如果禁止刷新
@@ -125,15 +122,13 @@
 - (void)doneLoadData{
 	_reloading = NO;
     [self hideLoadingState];
-    CGFloat y = self.tableView.contentSize.height;
-    self.tableView.contentSize = CGSizeMake(self.tableView.contentSize.width, y+BAR_HEIGHT);
+    self.tableView.contentSize = CGSizeMake(self.tableView.contentSize.width, self.tableView.contentSize.height);
     _refreshFootView.frame = [self footFrame];
 }
 
 #pragma mark 底部控件的尺寸
 - (CGRect)footFrame {
-    CGFloat y = self.tableView.contentSize.height - BAR_HEIGHT;
-    NSLog(@"y = %f",y);
+    CGFloat y = self.tableView.contentSize.height;
     CGFloat y2 = self.tableView.frame.size.height;
     if (y < y2) {
         y = y2;

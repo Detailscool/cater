@@ -10,14 +10,10 @@
 
 @interface ClassicDishController : BaseViewController<UIScrollViewDelegate>
 @property (retain, nonatomic) IBOutlet UIScrollView *scrollView;
-@property (retain, nonatomic) IBOutlet UILabel *cpName;
-@property (retain, nonatomic) IBOutlet UILabel *cpPrice;
-@property (retain, nonatomic) IBOutlet UILabel *cpIntroduce;
-@property (retain, nonatomic) IBOutlet UIButton *addBtn;
+@property (retain, nonatomic) UIButton *addBtn;
 //当前显示经典菜品的index
 @property (nonatomic,assign) int currentIndex;
-- (IBAction)buttonClick:(id)sender;
-@property (retain, nonatomic) IBOutlet UIPageControl *pageController;
+@property (retain, nonatomic)UIPageControl *pageController;
 - (IBAction)changePage:(id)sender;
-
+- (IBAction)buttonClick:(id)sender;
 @end

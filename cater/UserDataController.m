@@ -19,6 +19,7 @@
 @end
 
 @implementation UserDataController
+@synthesize fields = _fields;
 - (void)afterLoadView{
     [super afterLoadView];
     self.view.backgroundColor = kGlobalBackgroundColor;
@@ -27,6 +28,7 @@
     logined = YES;
     if (!logined) { //没有登录
         self.title = @"登录";
+        self.fields = [[[NSMutableDictionary alloc] initWithCapacity:10] autorelease];
         //取消
         UIBarButtonItem *cancelBtn = [[UIBarButtonItem alloc] initWithTitle:@"取消" style:UIBarButtonItemStylePlain target:self action:@selector(barButtonItemClick:)];
         cancelBtn.tag = CANCEL_BTN_TAG;
@@ -80,7 +82,7 @@
         mobilePhone.text = @"13554867904";
         
         
-        NSMutableDictionary *dictionary = [ NSMutableDictionary dictionaryWithObjectsAndKeys:[NSArray arrayWithObjects:@"订单管理",@"我的评论" ,nil],int2str(0),[NSArray arrayWithObjects:@"修改手机号码绑定",@"修改密码" ,nil],int2str(1),[NSArray arrayWithObjects:@"退出登录" ,nil],int2str(2), nil];
+        NSMutableDictionary *dictionary = [ NSMutableDictionary dictionaryWithObjectsAndKeys:[NSArray arrayWithObjects:@"订单管理",@"我的评论",@"我的喜欢" ,nil],int2str(0),[NSArray arrayWithObjects:@"修改手机号码绑定",@"修改密码" ,nil],int2str(1),[NSArray arrayWithObjects:@"退出登录" ,nil],int2str(2), nil];
         
         MyUITableView *myTableView = [[MyUITableView alloc] initWithFrames:CGRectMake(0, peopleView.frame.size.height, IPHONE_WIDTH, 250) style:UITableViewStyleGrouped controller:self dataArray:dictionary];
         myTableView.contentSize = CGSizeMake(myTableView.frame.size.width, IPHONE_HEIGHT);
@@ -111,6 +113,8 @@
             [self.navigationController pushViewController:[self getControllerFromClass:@"OrderManagerController" title:@"订单管理"] animated:YES];
         }else if (row == 1){ //我的评论
             [self.navigationController pushViewController:[self getControllerFromClass:@"MyCommentController" title:@"我的评论"] animated:YES];
+        } else if (row == 2){ //我的喜欢
+            [self.navigationController pushViewController:[self getControllerFromClass:@"MyLikeController" title:@"我的喜欢"] animated:YES];
         }
     }
 }
@@ -128,16 +132,32 @@
 //创建UITableViewCell的子控件
 -(void) createChildView4Cell:(UITableViewCell *)cell indexPath:(NSIndexPath *)indexPath{
     if (logined)return;
-    UITextField *textField = [self createTextField:CGRectMake(95, ZERO, cell.frame.size.width-100, cell.frame.size.height) text:@"" tag:TEXT_FIELD_TAG font:GLOBAL_FONT];
     int row = indexPath.row;
+    UITextField *textField = [self createTextField:CGRectMake(95, ZERO, cell.frame.size.width-100, cell.frame.size.height) text:@"" tag:TEXT_FIELD_TAG+row font:GLOBAL_FONT];
+    [_fields setValue:textField forKey:int2str(textField.tag)];
+    textField.delegate = self;
     if (row == 0) {
+        textField.returnKeyType = UIReturnKeyNext;
         textField.placeholder = @"请输入账号";
     } else if(row == 1){
+        textField.returnKeyType = UIReturnKeyDone;
         textField.placeholder = @"请输入密码";
     }
     [cell addSubview:textField];
 }
 
+-(BOOL)textFieldShouldReturn:(UITextField *)textField{
+    UIReturnKeyType type = textField.returnKeyType;
+    if (type == UIReturnKeyNext) { //跳到下一项
+        int tag = textField.tag+1;
+        UITextField *field = [_fields objectForKey:int2str(tag)];
+        [field becomeFirstResponder];
+    } else { //发送登录请求
+        UITextField *field = [_fields objectForKey:int2str(textField.tag)];
+        [field resignFirstResponder];
+    }
+    return  YES ;
+}
 //监听barButton
 -(void)barButtonItemClick:(id)item{
     if ([item isKindOfClass:UIBarButtonItem.class]) {
@@ -152,11 +172,13 @@
             }
         }
     } else if ([item isKindOfClass:UIButton.class]){ //登录
+        
         NSLog(@"登录");
     }
 }
 
 -(void)dealloc {
+    [_fields release];
     [data release];
     [super dealloc];
 }

@@ -50,14 +50,10 @@
     int row = indexPath.row;
     NSString *title = nil;
     NSString *controllerString = nil;
-    if (section == 0 && row == 0) { //推荐
-        controllerString = @"SuggestionController";
-//        title = @"推荐";
-        title = @"意见";
-    }else if (section == 0 && row == 1){//意见
+    if (section == 0 && row == 0) { //意见
         controllerString = @"SuggestionController";
         title = @"意见";
-    }else if (section == 0 && row == 2){ //帮助
+    }else if (section == 0 && row == 1){ //帮助
         controllerString = @"HelpController";
         title = @"帮助";
     }else if (section == 1 && row == 0){ //更新

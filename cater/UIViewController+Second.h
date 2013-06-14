@@ -11,4 +11,5 @@
 @interface UIViewController (Second)<UINavigationControllerDelegate, UIImagePickerControllerDelegate,UIActionSheetDelegate,PassImageDelegate>
 // 取得相片
 - (void)getPhoto;
+-(UIView *)createSperatorLine:(CGRect)frame parentView:(UIView *)parentView;
 @end
