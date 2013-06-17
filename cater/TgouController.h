@@ -13,5 +13,7 @@
 @property (retain, nonatomic) IBOutlet UILabel *introduceLabel;
 @property (retain, nonatomic) IBOutlet UIButton *addBtn;
 - (IBAction)buttonClick:(id)sender;
-
+//当前显示经典菜品的index
+@property (nonatomic,assign) int currentIndex;
+@property (retain, nonatomic)UIPageControl *pageController;
 @end

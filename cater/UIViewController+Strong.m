@@ -98,6 +98,7 @@
  
     if (![title stringNull]) {
         [button setTitle:title forState:UIControlStateNormal];
+        [button setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
     }
     if (![normalImage stringNull]) {
         [button setBackgroundImage:[UIImage imageWithContentsOfFile:[normalImage imageFullPath]] forState:UIControlStateNormal];

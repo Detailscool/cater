@@ -11,22 +11,81 @@
 #import "UserDataManager.h"
 #import "UIViewController+Strong.h"
 #import "iToast.h"
+#import "UIViewController+Second.h"
+#import "NSString+Strong.h"
 @interface OrderController (){
     CPListController *cpListController;
     //购物车
     UIBarButtonItem *buyCar;
+    
+    //热菜
+    UIButton *reCaiButton;
+    //冷菜
+    UIButton *lengCaiButton;
+    //汤羹
+    UIButton *tanggenButton;
+    //其他
+    UIButton *otherButton;
 }
 @end
 
 @implementation OrderController
+-(void)buttonClick:(UIButton *)button{
+    [self setButtonbackgroundImage:button];
+}
+-(void)setButtonbackgroundImage:(UIButton *)button{
+    [reCaiButton setBackgroundImage:[UIImage imageNamed:@"jj_button_normal"] forState:UIControlStateNormal];
+    [lengCaiButton setBackgroundImage:[UIImage imageNamed:@"jj_button_normal"] forState:UIControlStateNormal];
+    [tanggenButton setBackgroundImage:[UIImage imageNamed:@"jj_button_normal"] forState:UIControlStateNormal];
+    [otherButton setBackgroundImage:[UIImage imageNamed:@"jj_button_normal"] forState:UIControlStateNormal];
+    [button setBackgroundImage:[UIImage imageNamed:@"jj_button_pressed"] forState:UIControlStateNormal];
+}
 -(void)afterLoadView{
     [super afterLoadView];
-   
-    CGRect frame = _segController.frame;
+    self.view.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageWithContentsOfFile:[@"order_dish_bg" imageFullPath]]];
+    UIView *view = [[[UIView alloc] initWithFrame:CGRectMake(18.0, 10.0, 284, 40)] autorelease];
+    view.backgroundColor = [UIColor clearColor];
+    CGRect buttonFrame = CGRectMake(ZERO, ZERO, 71, 40);
+    
+    reCaiButton = [self createButton:buttonFrame title:@"热菜" normalImage:@"jj_button_pressed" hightlightImage:nil controller:self  selector:@selector(buttonClick:) tag:ZERO];
+//    reCaiButton.accessibilityValue = @"jj_button_pressed";
+    reCaiButton.titleLabel.font = [UIFont boldSystemFontOfSize:15];
+    buttonFrame.origin.x+=buttonFrame.size.width;
+    lengCaiButton = [self createButton:buttonFrame title:@"冷菜" normalImage:@"jj_button_normal" hightlightImage:nil controller:self  selector:@selector(buttonClick:) tag:ZERO];
+//    lengCaiButton.accessibilityValue = @"jj_button_pressed";
+    lengCaiButton.titleLabel.font = [UIFont boldSystemFontOfSize:15];
+    
+    buttonFrame.origin.x+=buttonFrame.size.width;
+    tanggenButton = [self createButton:buttonFrame title:@"汤羹" normalImage:@"jj_button_normal" hightlightImage:nil controller:self  selector:@selector(buttonClick:) tag:ZERO];
+    tanggenButton.titleLabel.font = [UIFont boldSystemFontOfSize:15];
+//    tanggenButton.accessibilityValue = @"tanggen_button_pressed";
+    
+    
+    
+    buttonFrame.origin.x+=buttonFrame.size.width;
+    
+    UIView *spearatorView = [[UIView alloc] initWithFrame:CGRectMake(buttonFrame.origin.x, ZERO, 1, 40)];
+    spearatorView.backgroundColor = [Common colorWithHexString:@"eeeeee"];
+    [view addSubview:spearatorView];
+    [spearatorView release];
+    
+    buttonFrame.origin.x+=1;
+    
+    otherButton = [self createButton:buttonFrame title:@"其他" normalImage:@"jj_button_normal" hightlightImage:nil controller:self  selector:@selector(buttonClick:) tag:ZERO];
+//    otherButton.accessibilityValue = @"other_button_pressed";
+    otherButton.titleLabel.font = [UIFont boldSystemFontOfSize:15];
+    [view addSubview:lengCaiButton];
+    [view addSubview:tanggenButton];
+    [view addSubview:otherButton];
+    [view addSubview:reCaiButton];
+    [self.view addSubview:view];
+    
+    
+    CGRect frame = view.frame;
     cpListController = [[CPListController alloc] init];
     
-    CGFloat cpViewY = frame.origin.y+frame.size.height + 5;
-    cpListController.view.frame = CGRectMake(0, cpViewY, IPHONE_WIDTH, self.view.frame.size.height - cpViewY);
+    CGFloat cpViewY = frame.origin.y+frame.size.height +10;
+    cpListController.view.frame = CGRectMake(20, cpViewY, IPHONE_WIDTH-40, self.view.frame.size.height - cpViewY);
   
     [self addChildViewController:cpListController];
     [self.view addSubview:cpListController.view];

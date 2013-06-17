@@ -47,9 +47,9 @@
 //成功添加购物车
 #define ADD_CAR_SUCCESS @"addCarSuccess"
 
-#define BTN_NORMAL @"btn_normal"
+#define BTN_NORMAL @"cancel_order"
 
-#define BTN_PRESSED @"btn_pressed"
+#define BTN_PRESSED @"order_dish"
 
 #define ORDER_CATER @"点菜"
 

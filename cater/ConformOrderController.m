@@ -29,18 +29,24 @@
 -(void)afterLoadView{
     self.grouped = YES;
     [super afterLoadView];
-    
+   
+}
+
+-(void)viewDidAppear:(BOOL)animated{
+    [super viewDidAppear:animated];
     UIBarButtonItem *backItem = [[UIBarButtonItem alloc] initWithTitle:@"返回" style:UIBarButtonItemStylePlain target:self action:@selector(back)];
     self.navigationItem.backBarButtonItem = backItem;
     [backItem release];
     
     
     //改变tableView的背景
-    self.tableView.backgroundColor =kGlobalBackgroundColor;
+    self.tableView.backgroundColor =[UIColor colorWithPatternImage:[UIImage imageNamed:@"buy_car_bg"]];
     self.tableView.backgroundView =nil;
     
-    dictionary = [[NSMutableDictionary alloc] initWithObjectsAndKeys:[NSArray arrayWithObjects:@"客户信息：", @"联系方式：",@"用餐人数：",nil],int2str(0),[NSArray arrayWithObjects:@"就餐地点：",@"到店时间：", nil],int2str(1),[NSArray arrayWithObjects:@"共点菜：",@"总计：", nil],int2str(2),[NSArray arrayWithObjects:@"确定下单", nil],int2str(3), nil];
+    dictionary = [[NSMutableDictionary alloc] initWithObjectsAndKeys:[NSArray arrayWithObjects:@"",nil],int2str(0), [NSArray arrayWithObjects:@"客户信息：", @"联系方式：",@"用餐人数：",nil],int2str(1),[NSArray arrayWithObjects:@"就餐地点：",@"到店时间：", nil],int2str(2),[NSArray arrayWithObjects:@"共点菜：",@"总计：", nil],int2str(3),[NSArray arrayWithObjects:@"确定下单", nil],int2str(5),[NSArray arrayWithObjects:@"", nil],int2str(4), nil];
+    [self.tableView reloadData];
 }
+
 -(void)back{
     [self.navigationController popToRootViewControllerAnimated:YES];
 }
@@ -61,11 +67,15 @@
 
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section{
     if (section == 0) {
+        return @"商家提示";
+    }else if (section == 1) {
         return @"联系人信息";
-    } else if (section == 1) {
-        return @"餐厅信息";
     } else if (section == 2) {
+        return @"餐厅信息";
+    } else if (section == 3) {
         return @"点菜信息";
+    }else if (section == 4) {
+        return @"给商家留言";
     }
     return @"";
 }
@@ -74,7 +84,6 @@
     //隐藏键盘
     [[UIApplication sharedApplication] sendAction:@selector(resignFirstResponder) to:nil from:nil forEvent:nil]; 
 }
-//- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section{}
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     int section = indexPath.section;
@@ -85,6 +94,20 @@
     }
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:IDENTIFIER];
+    
+    cell = [self initCell:indexPath];
+    [self renderCell:cell indexPath:indexPath];
+    return cell;
+}
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
+    if (indexPath.section == 4 || indexPath.section == 0) {
+        return 100;
+    }
+    return [super tableView:tableView heightForRowAtIndexPath:indexPath];
+}
 #pragma mark - 初始化cell
 - (UITableViewCell *)initCell:(NSIndexPath *)indexPath{
     int section = indexPath.section;
@@ -94,7 +117,16 @@
     cell.textLabel.backgroundColor = [UIColor clearColor];
     cell.textLabel.font = GLOBAL_FONT;
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
-    if (section == 0) { //联系人信息
+    if (section == 0) { //商家提示
+        UITextView *textView=[[[UITextView alloc] initWithFrame:CGRectMake(ZERO,ZERO,cell.frame.size.width - 30, 100)] autorelease];
+        textView.editable = NO;
+        textView.text = @"俏江南LOGO中的脸谱取自于川剧变脸人物刘宗敏，他是李自成手下的大将军，勇猛彪捍，机智过人，被民俏江南LOGO[1]间百姓誉为武财神，寓意招财进宝，驱恶辟邪，而俏江南选用经过世界著名平面设计大师再创作的此脸谱为公司LOGO，旨在用现代的精神去继承和光大中国五千年悠久的美食文化，并在公司成长过程中通过智慧，勇气，意志力去打造中国餐饮行业的世界品牌。";
+        [textView.layer setShadowColor:[UIColor whiteColor].CGColor];
+        [textView.layer setShadowOffset:CGSizeMake(.6, .6)];
+        [textView setBackgroundColor:[UIColor clearColor]];
+        [textView setFont:GLOBAL_FONT];
+        [cell.contentView addSubview:textView];
+    }else if (section == 1) { //联系人信息
         UITextField *textField = [self createTextField:CGRectMake(95, ZERO, cell.frame.size.width-100, cell.frame.size.height) text:@"潘康醒" tag:TEXT_FIELD_TAG font:GLOBAL_FONT];
         if (row != 2) {
             textField.enabled = NO;
@@ -106,7 +138,7 @@
             textField.keyboardType = UIKeyboardTypeNumberPad;
         }
         [cell.contentView addSubview:textField];
-    } else if (section == 1) { //餐厅信息
+    } else if (section == 2) { //餐厅信息
         if (row == 0) {
             UITextField *textField = [self createTextField:CGRectMake(95, ZERO, cell.frame.size.width-100, cell.frame.size.height) text:@"聚牛叉公司" tag:TEXT_FIELD_TAG font:GLOBAL_FONT];
             textField.enabled = NO;
@@ -118,16 +150,25 @@
             cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
             [cell.contentView addSubview:timeField];
         }
-    } else if (section == 2) { //点菜信息
+    } else if (section == 3) { //点菜信息
         NSString *text = row == 0?@"10道":@"600元";
         UITextField *textField = [self createTextField:CGRectMake(95, ZERO, cell.frame.size.width-100, cell.frame.size.height) text:text tag:TEXT_FIELD_TAG font:GLOBAL_FONT];
         textField.enabled = NO;
         [cell.contentView addSubview:textField];
-    } else if (section == 3){ //确定下单
-       UIButton *button =  [self createButton:CGRectMake(ZERO, ZERO,300, BAR_HEIGHT) title:@"确定下单" normalImage:@"selected_model" hightlightImage:nil controller:self selector:@selector(btnClick:) tag:ZERO];
-        button.layer.cornerRadius = 5.0f;
-        button.layer.masksToBounds = YES;
+    } else if (section == 5){ //确定下单
+        UIButton *button =  [self createButton:CGRectMake(ZERO,ZERO,300, BAR_HEIGHT) title:@"付  款" normalImage:@"pay_button_normal" hightlightImage:@"pay_button_pressed" controller:self selector:@selector(btnClick:) tag:ZERO];
+        [button setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+        [button setTitleColor:[UIColor whiteColor] forState:UIControlStateHighlighted];
         [cell.contentView addSubview:button];
+    } else if (section == 4){
+        UITextView *textView=[[[UITextView alloc] initWithFrame:CGRectMake(ZERO,ZERO,cell.frame.size.width - 30, 100)] autorelease];
+        textView.editable = NO;
+        textView.text = @"俏江南LOGO中的脸谱取自于川剧变脸人物刘宗敏，他是李自成手下的大将军，勇猛彪捍，机智过人，被民俏江南LOGO[1]间百姓誉为武财神，寓意招财进宝，驱恶辟邪，而俏江南选用经过世界著名平面设计大师再创作的此脸谱为公司LOGO，旨在用现代的精神去继承和光大中国五千年悠久的美食文化，并在公司成长过程中通过智慧，勇气，意志力去打造中国餐饮行业的世界品牌。";
+        [textView.layer setShadowColor:[UIColor whiteColor].CGColor];
+        [textView.layer setShadowOffset:CGSizeMake(.6, .6)];
+        [textView setBackgroundColor:[UIColor clearColor]];
+        [textView setFont:GLOBAL_FONT];
+        [cell.contentView addSubview:textView];
     }
     return cell;
 }

@@ -9,7 +9,7 @@
 #import "BaseViewController.h"
 
 @interface OrderController : BaseViewController
-@property (retain, nonatomic) IBOutlet UISegmentedControl *segController;
+@property (retain, nonatomic) UISegmentedControl *segController;
 - (IBAction)segChange:(id)sender;
 
 @end

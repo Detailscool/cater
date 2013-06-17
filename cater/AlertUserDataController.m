@@ -34,8 +34,8 @@
     [super afterLoadView];
     fields = [[NSMutableDictionary alloc] initWithCapacity:10];
     //注册键盘显示和隐藏监听
-    [[NSNotificationCenter defaultCenter ] addObserver:self selector:@selector(keyBoardWillShow:) name:UIKeyboardWillShowNotification object:nil];
-    [[NSNotificationCenter defaultCenter ] addObserver:self selector:@selector(keyBoardWillHiden:) name:UIKeyboardWillHideNotification object:nil];
+//    [[NSNotificationCenter defaultCenter ] addObserver:self selector:@selector(keyBoardWillShow:) name:UIKeyboardWillShowNotification object:nil];
+//    [[NSNotificationCenter defaultCenter ] addObserver:self selector:@selector(keyBoardWillHiden:) name:UIKeyboardWillHideNotification object:nil];
     
  
     //取消

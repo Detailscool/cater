@@ -12,23 +12,27 @@
 #import "RecognizerUtil.h"
 #import "UserDataManager.h"
 #import "NSString+Strong.h"
+#import "MyTableViewCell.h"
 @interface CPListController (){
     BOOL firstRender;
 }
 @end
 
 @implementation CPListController
-
+-(void)afterLoadView{
+    [super afterLoadView];
+    self.tableView.backgroundColor = [UIColor clearColor];
+}
 #pragma mark - 实现父类的方法
 - (NSInteger)cellHeight {
-    return 100;
+    return 103;
 }
 - (NSInteger)numberOfRows{
     return 5;
 }
 #pragma mark - 初始化cell
-- (UITableViewCell *)initCell:(NSIndexPath *)indexPath{
-    UITableViewCell *cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault
+- (MyTableViewCell *)initCell:(NSIndexPath *)indexPath{
+    MyTableViewCell *cell = [[[MyTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault
                                                     reuseIdentifier:IDENTIFIER] autorelease];
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
     UINib *nib = [UINib nibWithNibName:@"cpListCell" bundle:nil];
@@ -52,16 +56,17 @@
     NSString *imagePath = button.accessibilityLabel;
     if ([imagePath isEqualToString:BTN_PRESSED]) {//加入购物车
         imagePath = BTN_NORMAL;
-        [button setTitle:CANCEL forState:UIControlStateNormal];
+//        [button setTitle:CANCEL forState:UIControlStateNormal];
 //        NSMutableArray *buyCarData = [[UserDataManager sharedWebController] loadBuyCarData];
         NSMutableDictionary *dictionary = [NSMutableDictionary dictionaryWithCapacity:10];
         [[UserDataManager sharedWebController] addBuyCarData:dictionary];
     } else { //从购物车中移除
         imagePath = BTN_PRESSED;
-        [button setTitle:ORDER_CATER forState:UIControlStateNormal];
+//        [button setTitle:ORDER_CATER forState:UIControlStateNormal];
         [[UserDataManager sharedWebController] removeFromBuyCar];
     }
-    NSLog(@"index = %d",index);
+//    NSLog(@"index = %d",index);
+//    NSLog(@"imagePath = %@",imagePath);
     [button setBackgroundImage:[UIImage imageWithContentsOfFile:[imagePath imageFullPath]] forState:UIControlStateNormal];
     button.accessibilityLabel = imagePath;
 }
@@ -81,7 +86,7 @@
         } else {
             self.tableView.scrollEnabled = NO;
         }
-        self.tableView.frame = CGRectMake(ZERO, ZERO, IPHONE_WIDTH, height);
+        self.tableView.frame = CGRectMake(ZERO, ZERO, self.view.frame.size.width, height);
     }
 }
 

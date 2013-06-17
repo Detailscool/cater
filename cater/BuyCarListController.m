@@ -10,6 +10,7 @@
 #import "UserDataManager.h"
 #import "UIViewController+Strong.h"
 #import <QuartzCore/QuartzCore.h>
+#import "MyTableViewCell.h"
 @interface BuyCarListController (){
     BOOL firstRender;
     UITableViewCell *deleteCell;
@@ -27,7 +28,7 @@
 }
 #pragma mark - 实现父类的方法
 - (NSInteger)cellHeight {
-    return 110;
+    return 113;
 }
 - (NSInteger)numberOfRows{
     int row = [[UserDataManager sharedWebController].buyCarData count];
@@ -35,12 +36,11 @@
 }
 #pragma mark - 初始化cell
 - (UITableViewCell *)initCell:(NSIndexPath *)indexPath{
-    UITableViewCell *cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault
+    MyTableViewCell *cell = [[[MyTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault
                                                     reuseIdentifier:IDENTIFIER] autorelease];
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
     UINib *nib = [UINib nibWithNibName:@"buyCarCell" bundle:nil];
     UIView *view = [[nib instantiateWithOwner:self options:nil] lastObject];
-    view.backgroundColor = [Common colorWithHexString:@"666666"];
     [cell.contentView addSubview:view];
     return cell;
 }
@@ -51,20 +51,20 @@
         int height = self.cellHeight * self.numberOfRows;
         int selfViewHeight = self.view.frame.size.height;
         
-        UIButton *button =  [self createButton:CGRectMake(10,height+10,IPHONE_WIDTH - 2*10, BAR_HEIGHT) title:@"确定下单" normalImage:@"selected_model" hightlightImage:nil controller:self selector:@selector(btnClick:) tag:ZERO];
-        button.layer.cornerRadius = 5.0f;
-        button.layer.masksToBounds = YES;
+        UIButton *button =  [self createButton:CGRectMake(0,height+10,IPHONE_WIDTH - 40, BAR_HEIGHT) title:@"确定下单" normalImage:@"pay_button_normal" hightlightImage:@"pay_button_pressed" controller:self selector:@selector(btnClick:) tag:ZERO];
+        [button setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+        [button setTitleColor:[UIColor whiteColor] forState:UIControlStateHighlighted];
         [self.tableView addSubview:button];
         
-        height += 54;
+        height += 64;
         self.tableView.contentSize = CGSizeMake(self.tableView.frame.size.width, height);
         if (height > selfViewHeight) {
             height = selfViewHeight;
         } else {
             self.tableView.scrollEnabled = NO;
         }
-        self.tableView.frame = CGRectMake(ZERO, ZERO, IPHONE_WIDTH, height);
-        self.tableView.contentSize = CGSizeMake(self.tableView.frame.size.width, self.tableView.contentSize.height+54);
+        self.tableView.frame = CGRectMake(ZERO, ZERO, self.view.frame.size.width, height);
+        self.tableView.contentSize = CGSizeMake(self.tableView.frame.size.width, self.tableView.contentSize.height+64);
     }
     UIView *cellView = [cell.contentView.subviews lastObject];
     UIButton *plusButton = (UIButton *)[cellView viewWithTag:JIA_BTN_TAG];

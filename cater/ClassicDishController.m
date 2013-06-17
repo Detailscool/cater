@@ -39,29 +39,6 @@
 -(void)afterLoadView{
     [super afterLoadView];
     totalCount = 6;
-    int buttonHeight = _scrollView.frame.size.height;
-    int paddingX = 0;
-    //添加菜品
-    for (int index = 0; index < totalCount; index ++) {
-        CGRect frame = CGRectMake(index * (IPHONE_WIDTH + paddingX), ZERO, IPHONE_WIDTH, buttonHeight);
-        NSString *imagePath = index%2 == 0?@"dish":@"cpsuggest";
-        UIButton *button = [self createButton:frame title:nil normalImage:imagePath hightlightImage:nil controller:self selector:@selector(buttonClick:) tag:index];
-        [_scrollView addSubview:button];
-    }
-    _scrollView.bounces = NO;
-    _scrollView.showsHorizontalScrollIndicator = NO;
-    _scrollView.contentSize = CGSizeMake(totalCount*IPHONE_WIDTH+totalCount*paddingX, _scrollView.frame.size.height - BAR_HEIGHT);
-    
-    //创建方向箭头
-    CGRect frame = CGRectMake(ZERO,(buttonHeight - 90)/2,27, 45);
-    arrowLeft = [self createButton:frame title:nil normalImage:@"arrow_left" hightlightImage:nil controller:self selector:@selector(buttonClick:) tag:ZERO];
-    [self.view addSubview:arrowLeft];
-    
-    frame.origin.x += IPHONE_WIDTH - frame.size.width;
-    arrowRight = [self createButton:frame title:nil normalImage:@"arrow_right" hightlightImage:nil controller:self selector:@selector(buttonClick:) tag:ZERO];
-    [self.view addSubview:arrowRight];
-    
-    
     
     CGRect btnFrame = CGRectMake(ZERO, _scrollView.frame.size.height-BAR_HEIGHT, IPHONE_WIDTH, 104);
     UIButton *button4bg = [self createButton:btnFrame title:nil normalImage:@"jj_classic_dish_button_bg" hightlightImage:@"jj_classic_dish_button_bg" controller:nil selector:nil tag:ZERO];
@@ -115,7 +92,7 @@
     [bgViewBg addSubview:caterName];
     
     //菜品价格
-    frame = caterName.frame;
+    CGRect frame = caterName.frame;
     frame.origin.x += 200;
     caterPrice = [self createLabel:frame text:@"100 元" bgColor:[UIColor clearColor] alignment:NSTextAlignmentLeft font:GLOBAL_FONT line:1];
     caterPrice.textColor = [UIColor blackColor];
@@ -125,10 +102,32 @@
     [self.view addSubview:bgView];
     [self.view addSubview:bgViewBg];
     
+    int paddingX = 0;
+    int buttonHeight = _scrollView.frame.size.height;
+    
+    //创建方向箭头
+    frame = CGRectMake(ZERO,(buttonHeight - 90)/2,27, 45);
+    
+    arrowLeft = [self createButton:frame title:nil normalImage:@"arrow_left" hightlightImage:nil controller:self selector:@selector(buttonClick:) tag:ZERO];
+    [self.view addSubview:arrowLeft];
+    
+    frame.origin.x += IPHONE_WIDTH - frame.size.width;
+    arrowRight = [self createButton:frame title:nil normalImage:@"arrow_right" hightlightImage:nil controller:self selector:@selector(buttonClick:) tag:ZERO];
+    [self.view addSubview:arrowRight];
+    //添加菜品
+    for (int index = 0; index < totalCount; index ++) {
+        CGRect frame = CGRectMake(index * (IPHONE_WIDTH + paddingX), ZERO, IPHONE_WIDTH, buttonHeight);
+        NSString *imagePath = index%2 == 0?@"dish":@"cpsuggest";
+        UIButton *button = [self createButton:frame title:nil normalImage:imagePath hightlightImage:nil controller:self selector:@selector(buttonClick:) tag:index];
+        [_scrollView addSubview:button];
+    }
+    _scrollView.bounces = NO;
+    _scrollView.showsHorizontalScrollIndicator = NO;
+    _scrollView.contentSize = CGSizeMake(totalCount*IPHONE_WIDTH+totalCount*paddingX, _scrollView.frame.size.height - BAR_HEIGHT);
+    
     [self addObserver:self forKeyPath:@"currentIndex" options:NSKeyValueObservingOptionNew |NSKeyValueObservingOptionNew context:nil];
     self.currentIndex = ZERO;
 }
-
 -(void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context{
     if ([keyPath isEqualToString:@"currentIndex"]) {
          arrowLeft.hidden = currentIndex == ZERO?YES:NO;

@@ -7,7 +7,6 @@
 //
 
 #import "BaseListController.h"
-
 @interface BaseListController (){
     UITableView *myTableView;
 }
@@ -22,17 +21,17 @@
     self.contentHeight = toolBarY;
     // TableView
     if (_grouped) {
-         myTableView = [[[UITableView alloc] initWithFrame:CGRectMake(0, 0, 320, toolBarY) style:UITableViewStyleGrouped] autorelease];
+         myTableView = [[UITableView alloc] initWithFrame:CGRectMake(ZERO, ZERO, self.view.frame.size.width, toolBarY) style:UITableViewStyleGrouped];
     }else {
-        myTableView = [[[UITableView alloc] initWithFrame:CGRectMake(0, 0, 320, toolBarY) style:UITableViewStylePlain] autorelease];
+         myTableView = [[UITableView alloc] initWithFrame:CGRectMake(ZERO, ZERO, self.view.frame.size.width, toolBarY) style:UITableViewStylePlain];
     }
     myTableView.delegate = self;
     myTableView.dataSource = self;
-    myTableView.backgroundColor = kGlobalBackgroundColor;
+    myTableView.backgroundColor = [UIColor clearColor];
     myTableView.contentSize = myTableView.frame.size;
-    myTableView.separatorStyle = UITableViewCellSeparatorStyleSingleLine;
-    myTableView.separatorColor = [Common colorWithHexString:@"555555"];
+    myTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     [self.view addSubview:myTableView];
+    [myTableView release];
 }
 
 #pragma mark - 子类可以通过重写下面的方法

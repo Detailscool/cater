@@ -31,9 +31,6 @@
 -(void)afterLoadView{
     [super afterLoadView];
     
-    UIButton *titleView = [self createButton:CGRectMake(ZERO, ZERO, 83, 19) title:nil normalImage:@"jj_book_cater_label" hightlightImage:@"jj_book_cater_label" controller:nil selector:nil tag:ZERO];
-    self.navigationItem.titleView = titleView;
-    
     data = [[ NSArray alloc] initWithObjects:@"地图导航",@"餐厅简介", nil];
     
     int paddingY = _ClassicBtn.frame.size.height+10;
