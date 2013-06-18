@@ -43,7 +43,7 @@
     self.tableView.backgroundColor =[UIColor colorWithPatternImage:[UIImage imageNamed:@"buy_car_bg"]];
     self.tableView.backgroundView =nil;
     
-    dictionary = [[NSMutableDictionary alloc] initWithObjectsAndKeys:[NSArray arrayWithObjects:@"",nil],int2str(0), [NSArray arrayWithObjects:@"客户信息：", @"联系方式：",@"用餐人数：",nil],int2str(1),[NSArray arrayWithObjects:@"就餐地点：",@"到店时间：", nil],int2str(2),[NSArray arrayWithObjects:@"共点菜：",@"总计：", nil],int2str(3),[NSArray arrayWithObjects:@"确定下单", nil],int2str(5),[NSArray arrayWithObjects:@"", nil],int2str(4), nil];
+    dictionary = [[NSMutableDictionary alloc] initWithObjectsAndKeys:[NSArray arrayWithObjects:@"",nil],int2str(0), [NSArray arrayWithObjects:@"客户信息：", @"联系方式：",@"用餐人数：",nil],int2str(1),[NSArray arrayWithObjects:@"就餐地点：",@"到店时间：", nil],int2str(2),[NSArray arrayWithObjects:@"共点菜：",@"总计：", nil],int2str(3),[NSArray arrayWithObjects:@"", nil],int2str(5),[NSArray arrayWithObjects:@"", nil],int2str(4), nil];
     [self.tableView reloadData];
 }
 
@@ -96,8 +96,9 @@
 }
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:IDENTIFIER];
-    
+    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:IDENTIFIER] ;
+//    [cell release];
+    cell = nil;
     cell = [self initCell:indexPath];
     [self renderCell:cell indexPath:indexPath];
     return cell;
@@ -157,8 +158,7 @@
         [cell.contentView addSubview:textField];
     } else if (section == 5){ //确定下单
         UIButton *button =  [self createButton:CGRectMake(ZERO,ZERO,300, BAR_HEIGHT) title:@"付  款" normalImage:@"pay_button_normal" hightlightImage:@"pay_button_pressed" controller:self selector:@selector(btnClick:) tag:ZERO];
-        [button setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-        [button setTitleColor:[UIColor whiteColor] forState:UIControlStateHighlighted];
+        button.titleLabel.font = [UIFont boldSystemFontOfSize:20];
         [cell.contentView addSubview:button];
     } else if (section == 4){
         UITextView *textView=[[[UITextView alloc] initWithFrame:CGRectMake(ZERO,ZERO,cell.frame.size.width - 30, 100)] autorelease];

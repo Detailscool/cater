@@ -19,20 +19,13 @@
     self.grouped = YES;
     self.title = SETTING;
     [super afterLoadView];
-//    //返回
-//    UIBarButtonItem *returnBtn = [[[UIBarButtonItem alloc] initWithTitle:@"返回" style:UIBarButtonItemStylePlain target:self action:@selector(buttonClick:)] autorelease];
-//    self.navigationItem.leftBarButtonItem = returnBtn;
+    
     //改变tableView的背景
-    self.tableView.backgroundColor =kGlobalBackgroundColor;
+    self.tableView.backgroundColor = kGlobalBackgroundColor;
     self.tableView.backgroundView =nil;
     
     dictionary = [[NSMutableDictionary alloc] initWithObjectsAndKeys:[NSArray arrayWithObjects: @"意见",@"帮助",nil],int2str(0),[NSArray arrayWithObjects:@"更新",@"关于", nil],int2str(1),[NSArray arrayWithObjects:@"皮肤", nil],int2str(2), nil];
 }
-////监听返回
-//- (void) buttonClick:(UIBarButtonItem *)item{
-//    [self dismissViewControllerAnimated:YES completion:nil];
-//}
-
 #pragma mark - 实现父类的方法
 - (NSInteger)numberOfSections{
     return [dictionary count];

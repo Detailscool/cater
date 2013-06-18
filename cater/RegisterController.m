@@ -22,11 +22,11 @@
 - (void)afterLoadView{
     [super afterLoadView];
     self.fields = [[[NSMutableDictionary alloc] initWithCapacity:10] autorelease];
-    //取消
-    UIBarButtonItem *cancelBtn = [[UIBarButtonItem alloc] initWithTitle:@"取消" style:UIBarButtonItemStylePlain target:self action:@selector(barButtonItemClick:)];
-    cancelBtn.tag = CANCEL_BTN_TAG;
-    self.navigationItem.leftBarButtonItem = cancelBtn;
-    [cancelBtn release];
+//    //取消
+//    UIBarButtonItem *cancelBtn = [[UIBarButtonItem alloc] initWithTitle:@"取消" style:UIBarButtonItemStylePlain target:self action:@selector(barButtonItemClick:)];
+//    cancelBtn.tag = CANCEL_BTN_TAG;
+//    self.navigationItem.leftBarButtonItem = cancelBtn;
+//    [cancelBtn release];
     
     //完成
     UIBarButtonItem *registerBtn = [[UIBarButtonItem alloc] initWithTitle:@"完成" style:UIBarButtonSystemItemEdit target:self  action:@selector(barButtonItemClick:)];
@@ -61,12 +61,13 @@
     } else if(row == 3){
         textField.placeholder = @"";
         textField.returnKeyType = UIReturnKeyDone;
+        textField.frame = CGRectMake(95, ZERO, 120, cell.frame.size.height) ;
         [cell addSubview:textField];
         
         //发送验证码
-        CGRect frame = CGRectMake(textField.frame.origin.x + textField.frame.size.width-90,7,70, BAR_HEIGHT-14);
-        UIButton *button = [self createButton:frame title:@"获取验证码" normalImage:@"btn_pressed" hightlightImage:nil controller:self selector:@selector(barButtonItemClick:) tag:ZERO];
-        button.titleLabel.font = [UIFont fontWithName:@"CourierNewPSMT" size:14];
+        CGRect frame = CGRectMake(textField.frame.origin.x + textField.frame.size.width-20,4,102, 35);
+        UIButton *button = [self createButton:frame title:@"发送验证码" normalImage:@"send_auth_code_normal" hightlightImage:@"send_auth_code_pressed" controller:self selector:@selector(barButtonItemClick:) tag:ZERO];
+        button.titleLabel.font = [UIFont fontWithName:@"CourierNewPSMT" size:15];
         [cell addSubview:button];
         return;
     }

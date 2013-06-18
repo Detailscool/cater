@@ -9,12 +9,11 @@
 #import "UserDataController.h"
 #import "MyUITableView.h"
 #import "UIViewController+Strong.h"
+#import "NSString+Strong.h"
 @interface UserDataController (){
     NSMutableArray *data;
     //是否已经登录
     BOOL logined;
-    
-//    UIBarButtonItem *backBtn;
 }
 @end
 
@@ -22,19 +21,12 @@
 @synthesize fields = _fields;
 - (void)afterLoadView{
     [super afterLoadView];
-    self.view.backgroundColor = kGlobalBackgroundColor;
     //是否已经登录
     logined = [[[NSUserDefaults standardUserDefaults] objectForKey:LOGINED] boolValue];
     logined = YES;
     if (!logined) { //没有登录
         self.title = @"登录";
         self.fields = [[[NSMutableDictionary alloc] initWithCapacity:10] autorelease];
-        //取消
-        UIBarButtonItem *cancelBtn = [[UIBarButtonItem alloc] initWithTitle:@"取消" style:UIBarButtonItemStylePlain target:self action:@selector(barButtonItemClick:)];
-        cancelBtn.tag = CANCEL_BTN_TAG;
-        self.navigationItem.leftBarButtonItem = cancelBtn;
-        [cancelBtn release];
-        
         //注册
         UIBarButtonItem *registerBtn = [[UIBarButtonItem alloc] initWithTitle:@"注册" style:UIBarButtonSystemItemEdit target:self  action:@selector(barButtonItemClick:)];
         self.navigationItem.rightBarButtonItem = registerBtn;
@@ -43,29 +35,34 @@
         
         data = [[ NSMutableArray alloc] initWithObjects:@"账号：",@"密码：", nil];
         
-        MyUITableView *myTableView = [[MyUITableView alloc] initWithFrame:CGRectMake(0, -10, IPHONE_WIDTH, IPHONE_HEIGHT) style:UITableViewStyleGrouped controller:self dataArray:data];
+        int paddingX = 10;
+        MyUITableView *myTableView = [[MyUITableView alloc] initWithFrame:CGRectMake(paddingX, -10, self.view.frame.size.width - 2*paddingX, IPHONE_HEIGHT) style:UITableViewStyleGrouped controller:self dataArray:data];
         myTableView.scrollEnabled = NO;
         [self.view addSubview:myTableView];
         [myTableView release];
         
         //登录按钮
         CGRect frame = myTableView.frame;
-        frame.origin.y += 140;
+        frame.origin.y += 150;
         frame.size.height = BAR_HEIGHT;
-        frame.origin.x = 10;
-        frame.size.width = IPHONE_WIDTH - 20;
-        UIButton *button = [self createButton:frame title:@"登录" normalImage:@"selected_model" hightlightImage:nil controller:self selector:@selector(barButtonItemClick:) tag:ZERO];
+        frame.origin.x = 2*paddingX;
+        frame.size.width = self.view.frame.size.width - 4*paddingX;
+        UIButton *button = [self createButton:frame title:@"登  录" normalImage:@"pay_button_normal" hightlightImage:@"pay_button_pressed" controller:self selector:@selector(barButtonItemClick:) tag:ZERO];
+        [button setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+        button.titleLabel.font = [UIFont boldSystemFontOfSize:20];
+        [button setTitleColor:[UIColor whiteColor] forState:UIControlStateHighlighted];
         [self.view addSubview:button];
     } else { //已经登录
         //预定餐厅
-        UIBarButtonItem *registerBtn = [[UIBarButtonItem alloc] initWithTitle:@"预定餐厅" style:UIBarButtonSystemItemPageCurl target:self  action:@selector(barButtonItemClick:)];
+        UIBarButtonItem *registerBtn = [[UIBarButtonItem alloc] initWithTitle:@"预定餐厅" style:UIBarButtonItemStylePlain target:self  action:@selector(barButtonItemClick:)];
         self.navigationItem.rightBarButtonItem = registerBtn;
         registerBtn.tag = CONFORM_BTN_TAG;
         [registerBtn release];
         
         //加载个人头像
         UIView *peopleView = [[[NSBundle mainBundle] loadNibNamed:@"peopelImage" owner:nil options:nil] lastObject];
-        peopleView.frame = CGRectMake(ZERO, ZERO, IPHONE_WIDTH, peopleView.frame.size.height);
+        peopleView.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageWithContentsOfFile:[@"user_data_people_image_bg" imageFullPath]]];
+        peopleView.frame = CGRectMake(ZERO, ZERO, self.view.frame.size.width, peopleView.frame.size.height);
         [self.view addSubview:peopleView];
         for (UIView *childView in peopleView.subviews) {
             if ([childView isKindOfClass:UIButton.class]) {
@@ -84,7 +81,7 @@
         
         NSMutableDictionary *dictionary = [ NSMutableDictionary dictionaryWithObjectsAndKeys:[NSArray arrayWithObjects:@"订单管理",@"我的评论",@"我的喜欢" ,nil],int2str(0),[NSArray arrayWithObjects:@"修改手机号码绑定",@"修改密码" ,nil],int2str(1),[NSArray arrayWithObjects:@"退出登录" ,nil],int2str(2), nil];
         
-        MyUITableView *myTableView = [[MyUITableView alloc] initWithFrames:CGRectMake(0, peopleView.frame.size.height, IPHONE_WIDTH, 250) style:UITableViewStyleGrouped controller:self dataArray:dictionary];
+        MyUITableView *myTableView = [[MyUITableView alloc] initWithFrames:CGRectMake(0, peopleView.frame.size.height, self.view.frame.size.width, 280) style:UITableViewStyleGrouped controller:self dataArray:dictionary paddingTop:10];
         myTableView.contentSize = CGSizeMake(myTableView.frame.size.width, IPHONE_HEIGHT);
         [self.view addSubview:myTableView];
         [myTableView release];
@@ -126,14 +123,13 @@
 }
 //进入修改资料界面
 -(void)buttonClick:(UIButton *)button{
-//    backBtn.title = @"取消";
     [self.navigationController pushViewController:[self getControllerFromClass:@"AlertUserDataController" title:@"修改资料"] animated:YES];
 }
 //创建UITableViewCell的子控件
 -(void) createChildView4Cell:(UITableViewCell *)cell indexPath:(NSIndexPath *)indexPath{
     if (logined)return;
     int row = indexPath.row;
-    UITextField *textField = [self createTextField:CGRectMake(95, ZERO, cell.frame.size.width-100, cell.frame.size.height) text:@"" tag:TEXT_FIELD_TAG+row font:GLOBAL_FONT];
+    UITextField *textField = [self createTextField:CGRectMake(80, ZERO, cell.frame.size.width-120, cell.frame.size.height) text:@"" tag:TEXT_FIELD_TAG+row font:GLOBAL_FONT];
     [_fields setValue:textField forKey:int2str(textField.tag)];
     textField.delegate = self;
     if (row == 0) {

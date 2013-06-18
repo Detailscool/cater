@@ -50,14 +50,15 @@
         textField.keyboardType = UIKeyboardTypeNumberPad;
         [cell addSubview:textField];
         
-        //发送验证码
-        CGRect frame = CGRectMake(textField.frame.origin.x + textField.frame.size.width-6,7,70, BAR_HEIGHT-14);
-        UIButton *button = [self createButton:frame title:@"发送验证码" normalImage:@"btn_pressed" hightlightImage:nil controller:self selector:@selector(buttonClick:) tag:ZERO];
-        button.titleLabel.font = [UIFont fontWithName:@"CourierNewPSMT" size:14];
-        [cell addSubview:button];
     } else if (row == 1){
-        UITextField *textField = [self createTextField:CGRectMake(85, ZERO, cell.frame.size.width-110, cell.frame.size.height) text:@"" tag:TEXT_FIELD_TAG font:GLOBAL_FONT];
+        UITextField *textField = [self createTextField:CGRectMake(85, ZERO, 110, cell.frame.size.height) text:@"" tag:TEXT_FIELD_TAG font:GLOBAL_FONT];
         [cell addSubview:textField];
+        
+        //发送验证码
+        CGRect frame = CGRectMake(textField.frame.origin.x + textField.frame.size.width-6,4,102, 35);
+        UIButton *button = [self createButton:frame title:@"发送验证码" normalImage:@"send_auth_code_normal" hightlightImage:@"send_auth_code_pressed" controller:self selector:@selector(buttonClick:) tag:ZERO];
+        button.titleLabel.font = [UIFont fontWithName:@"CourierNewPSMT" size:15];
+        [cell addSubview:button];
     }
     
 }

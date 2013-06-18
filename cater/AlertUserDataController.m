@@ -9,6 +9,7 @@
 #import "AlertUserDataController.h"
 #import "MyUITableView.h"
 #import "UIViewController+Strong.h"
+#import "NSString+Strong.h"
 #import "UIViewController+Second.h"
 #define CONTENT_OFF_Y 36
 @interface AlertUserDataController (){
@@ -45,14 +46,16 @@
 //    [cancelBtn release];
     
     //保存
-    UIBarButtonItem *registerBtn = [[UIBarButtonItem alloc] initWithTitle:@"保存" style:UIBarButtonSystemItemPageCurl target:self  action:@selector(barButtonItemClick:)];
+    UIBarButtonItem *registerBtn = [[UIBarButtonItem alloc] initWithTitle:@"保存" style:UIBarButtonItemStyleDone target:self  action:@selector(barButtonItemClick:)];
     self.navigationItem.rightBarButtonItem = registerBtn;
     registerBtn.tag = CONFORM_BTN_TAG;
     [registerBtn release];
     
     //加载个人头像
     peopleView = [[[NSBundle mainBundle] loadNibNamed:@"peoplePhoto" owner:nil options:nil] lastObject];
-    peopleView.frame = CGRectMake(ZERO, ZERO, IPHONE_WIDTH, peopleView.frame.size.height);
+    peopleView.frame = CGRectMake(ZERO, ZERO, self.view.frame.size.width, peopleView.frame.size.height);
+    peopleView.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageWithContentsOfFile:[@"user_data_people_image_bg" imageFullPath]]];
+    
     [self.view addSubview:peopleView];
     
     peopleButton = (UIButton *)[peopleView viewWithTag:PEOPEL_BUTTON_TAG2];
@@ -60,7 +63,7 @@
     [alertButton addTarget:self action:@selector(barButtonItemClick:) forControlEvents:UIControlEventTouchUpInside];
     
     data = [[ NSMutableArray alloc] initWithObjects:@"姓名：", @"电话：",@"邮箱：",@"地址：", nil];
-    myTableView = [[MyUITableView alloc] initWithFrame:CGRectMake(0, peopleView.frame.size.height, IPHONE_WIDTH, IPHONE_HEIGHT) style:UITableViewStyleGrouped controller:self dataArray:data];
+    myTableView = [[MyUITableView alloc] initWithFrame:CGRectMake(0, peopleView.frame.size.height, self.view.frame.size.width, 280) style:UITableViewStyleGrouped controller:self dataArray:data paddingTop:30];
     myTableView.delegate = self;
     [self.view addSubview:myTableView];
     [myTableView release];

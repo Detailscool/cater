@@ -4,7 +4,7 @@
 #define int2str(param) [NSString stringWithFormat:@"%d",param]
 
 // 全局背景
-#define kGlobalBackgroundColor [UIColor colorWithPatternImage:[UIImage imageNamed:@"project_bg.png"]]
+#define kGlobalBackgroundColor [UIColor colorWithPatternImage:[UIImage imageWithContentsOfFile:[@"buy_car_bg" imageFullPath]]]
 
 // 公共标识(一般用在cell中)
 #define IDENTIFIER @"identifier"

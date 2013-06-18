@@ -12,6 +12,7 @@
 @synthesize controller;
 @synthesize dataArray = _dataArray;
 @synthesize dictionary = _dictionary;
+@synthesize _paddingTop;
 -(void)dealloc{
     [_dataArray release];
     [_dictionary release];
@@ -23,28 +24,44 @@
     if (self) {
         self.delegate = self;
         self.dataSource = self;
-        self.backgroundColor = kGlobalBackgroundColor;
+//        self.backgroundColor = kGlobalBackgroundColor;
         self.backgroundView =nil;
         self.contentSize = self.frame.size;
-        self.separatorStyle = UITableViewCellSeparatorStyleSingleLine;
-        self.separatorColor = SEPERATION_COLOR;
+        self.backgroundColor = [UIColor clearColor];
+//        self.separatorStyle = UITableViewCellSeparatorStyleSingleLine;
+//        self.separatorColor = SEPERATION_COLOR;
     }
     return self;
 }
 -(id)initWithFrame:(CGRect)frame style:(UITableViewStyle)style controller:(UIViewController *)_controller dataArray:(NSMutableArray *)data{
     self = [self initWithFrame:frame style:style];
     if (self) {
+        self._paddingTop = 40;
         self.dataArray = data;
         self.controller = _controller;
     }
     return self;
 }
-
+-(id)initWithFrame:(CGRect)frame style:(UITableViewStyle)style controller:(UIViewController *)_controller dataArray:(NSMutableArray *)data paddingTop:(int)paddingTop{
+    self = [self initWithFrame:frame style:style controller:_controller dataArray:data];
+    if (self) {
+        self._paddingTop = paddingTop;
+    }
+    return self;
+}
 -(id)initWithFrames:(CGRect)frame style:(UITableViewStyle)style controller:(UIViewController *)_controller dataArray:(NSMutableDictionary *)dictionary{
     self = [self initWithFrame:frame style:style];
     if (self) {
+        self._paddingTop = 40;
         self.dictionary = dictionary;
         self.controller = _controller;
+    }
+    return self;
+}
+-(id)initWithFrames:(CGRect)frame style:(UITableViewStyle)style controller:(UIViewController *)_controller dataArray:(NSMutableDictionary *)dictionary paddingTop:(int)paddingTop{
+    self = [self initWithFrames:frame style:style controller:_controller dataArray:dictionary ];
+    if (self) {
+        self._paddingTop = paddingTop;
     }
     return self;
 }
@@ -68,7 +85,7 @@
 #pragma mark - Table view delegate
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section{
     if (section == ZERO) {
-        return 40;
+        return self._paddingTop;
     }
     return 10;
 }
@@ -96,11 +113,27 @@
         }
         if (_dataArray && [controller respondsToSelector:@selector(createChildView4Cell:indexPath:)]) {
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
+            
             [controller performSelector:@selector(createChildView4Cell:indexPath:) withObject:cell withObject:indexPath];
         } else {
             cell.detailTextLabel.backgroundColor = [UIColor clearColor];
-            cell.selectionStyle = UITableViewCellSelectionStyleBlue;
-            cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+            if ([cell.textLabel.text isEqualToString:@"退出登录"]) {
+                UIView *bgView = [[[UIView alloc] initWithFrame:cell.frame] autorelease];
+                bgView.layer.cornerRadius = 10.0f;
+                
+                
+                cell.selectedBackgroundView =bgView;
+                cell.selectedBackgroundView.backgroundColor = [Common colorWithHexString:@"FF6633"];
+                
+                cell.backgroundColor = [Common colorWithHexString:@"dd0000"];
+               
+                cell.textLabel.textColor = [UIColor blackColor];
+                cell.textLabel.font = [UIFont systemFontOfSize:20];
+                cell.textLabel.textAlignment = NSTextAlignmentCenter;
+            } else {
+                cell.selectionStyle = UITableViewCellSelectionStyleBlue;
+                cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+            }
         }
     }
     return cell;

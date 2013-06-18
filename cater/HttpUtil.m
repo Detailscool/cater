@@ -150,7 +150,7 @@
     }
     // 如果要文件上传
     if (self.filePath) {
-        NSFileManager *mgr = [[NSFileManager defaultManager] autorelease];
+        NSFileManager *mgr = [NSFileManager defaultManager];
         // 如果文件存在
         if ([mgr fileExistsAtPath:self.filePath]) {
             [request setFile:self.filePath forKey:self.fileKey];
@@ -158,7 +158,6 @@
             self.requestType = RequestTypeUpload;
         } else {
             [[iToast makeText:@"文件不存在"] show:iToastTypeWarnning];
-            [request release];
             return;
         }
     }

@@ -7,6 +7,7 @@
 //
 #import "BaseViewController.h"
 #import "RequestBean.h"
+#import "NSString+Strong.h"
 @implementation BaseViewController
 @synthesize topViewController = _topViewController;
 #pragma mark - View Lifecircle

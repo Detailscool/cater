@@ -34,6 +34,7 @@
     _infoLabel.frame = CGRectMake(infoLabelFrame.origin.x, infoLabelFrame.origin.y, labelSize.width, labelSize.height);
     _infoLabel.text = infoString;
     
+    
     CGRect btnFrame = _addBtn.frame;
     _addBtn.frame = CGRectMake(btnFrame.origin.x, _infoLabel.frame.origin.y + _infoLabel.frame.size.height+ 10, btnFrame.size.width, btnFrame.size.height);
     
