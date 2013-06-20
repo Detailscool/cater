@@ -8,6 +8,10 @@
 
 #import "BaseListController.h"
 
-@interface CPListController : BaseListController
-
+@interface CPListController : BaseListController{
+    
+}
+@property(nonatomic,retain)NSMutableArray *dataArray;
+@property(nonatomic,assign)BOOL firstRender;
+-(id)initWithData:(NSMutableArray *)dataArray;
 @end

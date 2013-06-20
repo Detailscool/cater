@@ -17,7 +17,6 @@
 @implementation AlertMobilePhoneController
 -(void)afterLoadView{
     [super afterLoadView];
-    
     //完成
     UIBarButtonItem *registerBtn = [[UIBarButtonItem alloc] initWithTitle:@"完成" style:UIBarButtonItemStylePlain target:self  action:@selector(barButtonItemClick:)];
     self.navigationItem.rightBarButtonItem = registerBtn;
@@ -46,7 +45,7 @@
 -(void) createChildView4Cell:(UITableViewCell *)cell indexPath:(NSIndexPath *)indexPath{
     int row = indexPath.row;
     if (row == 0) {
-        UITextField *textField = [self createTextField:CGRectMake(130, ZERO,110, cell.frame.size.height) text:@"" tag:TEXT_FIELD_TAG font:GLOBAL_FONT];
+        UITextField *textField = [self createTextField:CGRectMake(135, ZERO,145, cell.frame.size.height) text:@"" tag:TEXT_FIELD_TAG font:GLOBAL_FONT];
         textField.keyboardType = UIKeyboardTypeNumberPad;
         [cell addSubview:textField];
         

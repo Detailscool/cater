@@ -74,6 +74,10 @@
 }
 //得到图片的全路径
 - (NSString *)imageFullPath{
+    NSString *pathComponent = self.pathExtension;
+    if ([pathComponent isEqualToString:@"png"] || [pathComponent isEqualToString:@"jpg"]) {
+        self = [self stringByDeletingPathExtension];
+    }
     return [[NSBundle mainBundle] pathForResource:self ofType:@"png"];
 }
 

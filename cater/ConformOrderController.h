@@ -8,6 +8,6 @@
 
 #import "BaseListController.h"
 
-@interface ConformOrderController : BaseListController
+@interface ConformOrderController : BaseListController<UITextFieldDelegate,UITextViewDelegate>
 
 @end

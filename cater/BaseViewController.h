@@ -13,4 +13,5 @@
 - (void)afterLoadView;
 //启动一个动画
 -(void)startAnimation:(UIView *)targetView frame:(CGRect)frame delegate:(id)delegate action:(SEL)action;
+-(NSString *)encodeKey:(NSString *)name price:(NSString *)price;
 @end

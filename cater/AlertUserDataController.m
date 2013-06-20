@@ -19,8 +19,6 @@
     //修改头像按钮
     UIButton *alertButton;
     MyUITableView *myTableView;
-    //获得焦点的textField的父类
-    UIView *focusView;
     
     NSMutableDictionary *fields;
     //加载个人头像
@@ -35,15 +33,8 @@
     [super afterLoadView];
     fields = [[NSMutableDictionary alloc] initWithCapacity:10];
     //注册键盘显示和隐藏监听
-//    [[NSNotificationCenter defaultCenter ] addObserver:self selector:@selector(keyBoardWillShow:) name:UIKeyboardWillShowNotification object:nil];
-//    [[NSNotificationCenter defaultCenter ] addObserver:self selector:@selector(keyBoardWillHiden:) name:UIKeyboardWillHideNotification object:nil];
-    
- 
-    //取消
-//    UIBarButtonItem *cancelBtn = [[UIBarButtonItem alloc] initWithTitle:@"取消" style:UIBarButtonSystemItemPageCurl target:self action:@selector(barButtonItemClick:)];
-//    cancelBtn.tag = CANCEL_BTN_TAG;
-//    self.navigationItem.leftBarButtonItem = cancelBtn;
-//    [cancelBtn release];
+    [[NSNotificationCenter defaultCenter ] addObserver:self selector:@selector(keyBoardWillShow:) name:UIKeyboardWillShowNotification object:nil];
+    [[NSNotificationCenter defaultCenter ] addObserver:self selector:@selector(keyBoardWillHiden:) name:UIKeyboardWillHideNotification object:nil];
     
     //保存
     UIBarButtonItem *registerBtn = [[UIBarButtonItem alloc] initWithTitle:@"保存" style:UIBarButtonItemStyleDone target:self  action:@selector(barButtonItemClick:)];
@@ -65,13 +56,14 @@
     data = [[ NSMutableArray alloc] initWithObjects:@"姓名：", @"电话：",@"邮箱：",@"地址：", nil];
     myTableView = [[MyUITableView alloc] initWithFrame:CGRectMake(0, peopleView.frame.size.height, self.view.frame.size.width, 280) style:UITableViewStyleGrouped controller:self dataArray:data paddingTop:30];
     myTableView.delegate = self;
+    myTableView.scrollEnabled = NO;
     [self.view addSubview:myTableView];
     [myTableView release];
 }
 //创建UITableViewCell的子控件
 -(void) createChildView4Cell:(UITableViewCell *)cell indexPath:(NSIndexPath *)indexPath{
     int row = indexPath.row;
-    UITextField *textField = [self createTextField:CGRectMake(95, ZERO, cell.frame.size.width-100, cell.frame.size.height) text:@"" tag:TEXT_FIELD_TAG font:GLOBAL_FONT];
+    UITextField *textField = [self createTextField:CGRectMake(85, ZERO, cell.frame.size.width-100, cell.frame.size.height) text:@"" tag:TEXT_FIELD_TAG font:GLOBAL_FONT];
     textField.delegate = self;
     textField.tag = TEXT_FIELD_TAG +row;
     [fields setValue:textField forKey:int2str(TEXT_FIELD_TAG +row)];
@@ -96,42 +88,34 @@
         [self getPhoto];
     }
 }
-////键盘显示
-//-(void)keyBoardWillShow:(NSNotification *)notification{
-//    if(firstSHow)return;
-//    firstSHow = YES;
-//    int y = focusView.frame.origin.y ;
-//    [myTableView setContentOffset:CGPointMake(ZERO, y) animated:YES];   
-//    
-//}
-////键盘隐藏
-//-(void)keyBoardWillHiden:(NSNotification *)notification{
-//    firstSHow = NO;
-//   [myTableView setContentOffset:CGPointMake(ZERO, ZERO) animated:YES];
-//}
-//#pragma mark - UITextFieldDelegete方法
-//- (BOOL)textFieldShouldBeginEditing:(UITextField *)textField{
-//    focusView = textField.superview;
-//    return YES;
-//}
-//- (void)textFieldDidBeginEditing:(UITextField *)textField {
-//}
-//
-//- (void)textFieldDidEndEditing:(UITextField *)textField {
-//}
-//- (BOOL)textFieldShouldReturn:(UITextField *)textField {
-//    int tag = textField.tag;
-//    if (tag != TEXT_FIELD_TAG + 3) {
-//        UITextField *field = [fields objectForKey:int2str(tag+1)];
-//        firstSHow = NO;
-//        focusView = field.superview;
-//        [field becomeFirstResponder];
-//    } else {
-//        [textField resignFirstResponder];
-//    }
-//    return YES;
-//}
-//
+//键盘显示
+-(void)keyBoardWillShow:(NSNotification *)notification{
+    if(firstSHow)return;
+    firstSHow = YES;
+    CGRect frame = self.view.frame;
+    frame.origin.y -= 165;
+    [self startAnimation:self.view frame:frame delegate:nil action:nil];
+}
+//键盘隐藏
+-(void)keyBoardWillHiden:(NSNotification *)notification{
+    firstSHow = NO;
+    CGRect frame = self.view.frame;
+    frame.origin.y +=165;
+    [self startAnimation:self.view frame:frame delegate:nil action:nil];
+}
+#pragma mark - UITextFieldDelegete方法
+- (BOOL)textFieldShouldReturn:(UITextField *)textField {
+    int tag = textField.tag;
+    if (tag != TEXT_FIELD_TAG + 3) {
+        firstSHow = NO;
+        UITextField *field = [fields objectForKey:int2str(tag+1)];
+        [field becomeFirstResponder];
+    } else {
+        [textField resignFirstResponder];
+    }
+    return YES;
+}
+
 #pragma mark - PassImageDelegate 方法
 -(void)passImage:(UIImage *)image{
     [peopleButton setBackgroundImage:image forState:UIControlStateNormal];

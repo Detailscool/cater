@@ -15,7 +15,6 @@
 @implementation CateInfoController
 - (void)afterLoadView{
     [super afterLoadView];
-    self.view.backgroundColor = [UIColor whiteColor];
     //设置不显示垂直滚动条
     _scrollView.showsVerticalScrollIndicator = NO;
     

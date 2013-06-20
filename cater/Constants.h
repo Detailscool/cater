@@ -9,9 +9,13 @@
 //全局字体
 #define GLOBAL_FONT [UIFont fontWithName:@"CourierNewPSMT" size:15]
 //不包括状态栏的高度
-#define IPHONE_HEIGHT  [[UIScreen mainScreen] bounds].size.height - 20
+#define IPHONE_HEIGHT   [ UIScreen mainScreen ].applicationFrame.size.height
 
-#define IPHONE_WIDTH  [[UIScreen mainScreen] bounds].size.width
+#define IPHONE_WIDTH   [ UIScreen mainScreen ].applicationFrame.size.width
+
+//#define IPHONE_HEIGHT   460
+//
+//#define IPHONE_WIDTH   320
 
 #define BAR_HEIGHT 44
 //下载数据tag
@@ -69,3 +73,7 @@
 #define SAVE_TAG 37
 
 #define SEND_AUTH_CODE 38 
+
+#define DELETE_BUTTON_TAG 39
+
+#define LONG_BUTTON_TAG 40

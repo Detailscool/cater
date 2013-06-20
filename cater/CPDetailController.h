@@ -7,13 +7,15 @@
 //
 
 #import "BaseViewController.h"
-
+#import "CustomeButton.h"
 @interface CPDetailController : BaseViewController
+@property (retain, nonatomic) NSMutableDictionary *dictionary;
+@property (retain, nonatomic) IBOutlet UIButton *cpImageButton;
 @property (retain, nonatomic) IBOutlet UIScrollView *scrollView;
 @property (retain, nonatomic) IBOutlet UILabel *cpName;
 @property (retain, nonatomic) IBOutlet UILabel *cpPrice;
-@property (retain, nonatomic) IBOutlet UIButton *orderButton;
-@property (retain, nonatomic) IBOutlet UIButton *likeButton;
+@property (retain, nonatomic) IBOutlet CustomeButton *orderButton;
+@property (retain, nonatomic) IBOutlet CustomeButton *likeButton;
 - (IBAction)buttonClick:(id)sender;
 
 @end

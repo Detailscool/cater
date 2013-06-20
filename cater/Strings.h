@@ -36,6 +36,7 @@
 #define NO_NETWORK @"请检查网络设置"
 
 #define BOOK_CATER @"预定餐厅"
+#define ORDER_DISH @"我要点菜"
 #define TUAN_GOU @"团购"
 #define USER_DATA @"用户信息"
 #define RECOMMAND @"菜品推荐"
@@ -46,7 +47,8 @@
 
 //成功添加购物车
 #define ADD_CAR_SUCCESS @"addCarSuccess"
-
+//从购物车删除成功
+#define DELETE_CAR_SUCCESS @"deleteCarSuccess"
 #define BTN_NORMAL @"cancel_order"
 
 #define BTN_PRESSED @"order_dish"
@@ -61,3 +63,10 @@
 #define TOTAL_PAGES @"totalPages"
 #define DATA @"data"
 #define PAGESIZE @"pageSize"
+
+#define KEY @"key"
+#define PRICE @"price"
+#define NAME @"name"
+#define ID @"id"
+#define IMAGE_URL @"imageUrl"
+#define CP_INFO @"info"

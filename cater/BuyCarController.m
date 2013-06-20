@@ -27,7 +27,6 @@
 
 -(void)afterLoadView{
     [super afterLoadView];
-    [self.view setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"buy_car_bg"]]];
     
     UINib *nib = [UINib nibWithNibName:@"buyCarTip" bundle:nil];
     UIView *tipView = [[nib instantiateWithOwner:self options:nil] lastObject];
@@ -35,11 +34,12 @@
     //提示点了多少种菜品
     label = (UILabel *)[tipView viewWithTag:ORDER_COUNT_TAG];
     label.text = [NSString stringWithFormat:@"共 %d 盘",[UserDataManager sharedWebController].buyCarData.count];
+    
+    
     //总共金额
     menoy = (UILabel *)[tipView viewWithTag:AMOUNT_COUNT_TAG];
-    menoy.text = @"0.00元";
+    menoy.text = [NSString stringWithFormat:@"%.2f元",[UserDataManager totalPrice]];
     
-//    tipView.backgroundColor = [Common colorWithHexString:@"444444"];
     tipView.frame = CGRectMake(20, ZERO, tipView.frame.size.width, tipView.frame.size.height);
     [self.view addSubview:tipView];
     
@@ -53,8 +53,6 @@
 -(void)barButtonItem:(UIBarButtonItem *)item{
     if (item == rightButtonItem) {
         [self.navigationController pushViewController:[self getControllerFromClass:@"ConformOrderController" title:@"下单"] animated:YES];
-    } else {
-//        [self.navigationController pushViewController:[self getControllerFromClass:@"OrderController" title:@"我要点菜"] animated:YES];
     }
 }
 //改变显示的数据

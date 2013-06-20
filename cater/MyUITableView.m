@@ -24,12 +24,8 @@
     if (self) {
         self.delegate = self;
         self.dataSource = self;
-//        self.backgroundColor = kGlobalBackgroundColor;
         self.backgroundView =nil;
-        self.contentSize = self.frame.size;
         self.backgroundColor = [UIColor clearColor];
-//        self.separatorStyle = UITableViewCellSeparatorStyleSingleLine;
-//        self.separatorColor = SEPERATION_COLOR;
     }
     return self;
 }

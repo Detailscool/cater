@@ -54,7 +54,7 @@
         [self.view addSubview:button];
     } else { //已经登录
         //预定餐厅
-        UIBarButtonItem *registerBtn = [[UIBarButtonItem alloc] initWithTitle:@"预定餐厅" style:UIBarButtonItemStylePlain target:self  action:@selector(barButtonItemClick:)];
+        UIBarButtonItem *registerBtn = [[UIBarButtonItem alloc] initWithTitle:@"我要点菜" style:UIBarButtonItemStylePlain target:self  action:@selector(barButtonItemClick:)];
         self.navigationItem.rightBarButtonItem = registerBtn;
         registerBtn.tag = CONFORM_BTN_TAG;
         [registerBtn release];
@@ -81,10 +81,10 @@
         
         NSMutableDictionary *dictionary = [ NSMutableDictionary dictionaryWithObjectsAndKeys:[NSArray arrayWithObjects:@"订单管理",@"我的评论",@"我的喜欢" ,nil],int2str(0),[NSArray arrayWithObjects:@"修改手机号码绑定",@"修改密码" ,nil],int2str(1),[NSArray arrayWithObjects:@"退出登录" ,nil],int2str(2), nil];
         
-        MyUITableView *myTableView = [[MyUITableView alloc] initWithFrames:CGRectMake(0, peopleView.frame.size.height, self.view.frame.size.width, 280) style:UITableViewStyleGrouped controller:self dataArray:dictionary paddingTop:10];
-        myTableView.contentSize = CGSizeMake(myTableView.frame.size.width, IPHONE_HEIGHT);
-        [self.view addSubview:myTableView];
-        [myTableView release];
+        MyUITableView *tableView = [[MyUITableView alloc] initWithFrames:CGRectMake(0, peopleView.frame.size.height, self.view.frame.size.width, IPHONE_HEIGHT - peopleView.frame.size.height - 20) style:UITableViewStyleGrouped controller:self dataArray:dictionary paddingTop:10];
+        tableView.contentSize = CGSizeMake(tableView.frame.size.width, tableView.frame.size.height+20);
+        [self.view addSubview:tableView];
+        [tableView release];
     }
 }
 
@@ -161,10 +161,10 @@
         if (tag == CANCEL_BTN_TAG) { //取消登录
             [self.navigationController popViewControllerAnimated:YES];
         } else if (tag == CONFORM_BTN_TAG){ 
-            if (!logined) {//注册
+            if (!logined) { //注册
                 [self.navigationController pushViewController:[self getControllerFromClass:@"RegisterController" title:@"注册"] animated:YES];
-            } else { //预定餐厅
-                [self.navigationController pushViewController:[self getControllerFromClass:@"BookCaterController" title:BOOK_CATER] animated:YES];
+               } else { //我要点菜
+                [self.navigationController pushViewController:[self getControllerFromClass:@"OrderController" title:ORDER_DISH] animated:YES];
             }
         }
     } else if ([item isKindOfClass:UIButton.class]){ //登录

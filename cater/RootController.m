@@ -20,6 +20,7 @@
 @end
 
 @implementation RootController
+
 - (void) afterLoadView{
     self.showToolBar = YES;
     [super afterLoadView];
@@ -30,7 +31,7 @@
     titleView.textColor = [UIColor whiteColor];
     self.navigationItem.titleView = titleView;
     //商家logo
-    UIButton *infoBtn = [self createButton:CGRectMake(20,5, 35, 35) title:nil normalImage:@"jj_logo" hightlightImage:@"jj_logo" controller:nil selector:nil tag:ZERO];
+    UIButton *infoBtn = [self createButton:CGRectMake(20,5, 60, 30) title:nil normalImage:@"jj_logo" hightlightImage:@"jj_logo" controller:nil selector:nil tag:ZERO];
     infoBtn.layer.cornerRadius = 5.0f;
     infoBtn.layer.masksToBounds = YES;
     
@@ -99,7 +100,6 @@
     }
     UIButton *button = [self createButton:cell.bounds title:nil normalImage:imagePath hightlightImage:nil controller:self selector:@selector(buttonClick:) tag:BUTTON_TAG];
     
-//    NSString *text = [[self buttonArray] objectAtIndex:row];
     UIButton *smallButton = [self createButton:CGRectMake(ZERO,button.frame.size.height - 26 ,IPHONE_WIDTH, 26) title:nil normalImage:smallImagePath hightlightImage:nil controller:self selector:@selector(smallButtonClick:) tag:ZERO];
     smallButton.backgroundColor = [UIColor clearColor];
     smallButton.titleLabel.font = [UIFont fontWithName:@"Arial-BoldMT" size:15];

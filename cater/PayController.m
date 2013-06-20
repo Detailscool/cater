@@ -18,11 +18,8 @@
 
 -(void)afterLoadView{
     [super afterLoadView];
-    self.view.backgroundColor = kGlobalBackgroundColor;
     UIBarButtonItem *backItem = [[UIBarButtonItem alloc] initWithTitle:@"返回" style:UIBarButtonItemStylePlain target:self action:@selector(back:)];
     self.navigationItem.backBarButtonItem = backItem;
-    
-  
     [backItem release];
 }
 -(void)back:(UIBarButtonItem *)item{

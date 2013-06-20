@@ -15,6 +15,7 @@
 #pragma mark - 公共的生命周期方法
 - (void)registerObserver{
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(addCarSuccess:) name:ADD_CAR_SUCCESS object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(deleteCarSuccess:) name:DELETE_CAR_SUCCESS object:nil];
     // 注册请求成功和请求失败的通知监听器
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(requestSuccess:) name:REQUEST_SUCCESS object:self];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(requestFailure:) name:REQUEST_FAILURE object:self];
@@ -22,7 +23,8 @@
 - (void)unRegisterObserver{
     // 卸载通知监听器
     [[NSNotificationCenter defaultCenter] removeObserver:self];
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:ADD_CAR_SUCCESS object:nil];
+//    [[NSNotificationCenter defaultCenter] removeObserver:self name:ADD_CAR_SUCCESS object:nil];
+//    [[NSNotificationCenter defaultCenter] removeObserver:self name:ADD_CAR_SUCCESS object:nil];
 }
 
 // 收到请求成功的通知
@@ -148,6 +150,7 @@
     textField.text = text;
     textField.tag = tag;
     textField.font = font;
+    textField.clearButtonMode = UITextFieldViewModeWhileEditing;
     textField.textAlignment = NSTextAlignmentLeft;
     textField.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
     return textField;

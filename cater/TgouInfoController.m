@@ -38,7 +38,7 @@
     CGRect btnFrame = _addBtn.frame;
     _addBtn.frame = CGRectMake(btnFrame.origin.x, _infoLabel.frame.origin.y + _infoLabel.frame.size.height+ 10, btnFrame.size.width, btnFrame.size.height);
     
-    int height = _addBtn.frame.origin.y + _addBtn.frame.size.height;
+    int height = _addBtn.frame.origin.y + _addBtn.frame.size.height + 20;
     _scrollView.contentSize = CGSizeMake(IPHONE_WIDTH, height);
 }
 

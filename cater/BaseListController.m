@@ -17,6 +17,7 @@
 @synthesize showToolBar = _showToolBar;
 @synthesize contentHeight = _contentHeight;
 - (void) afterLoadView{
+    [super afterLoadView];
     int toolBarY = _showToolBar? IPHONE_HEIGHT - BAR_HEIGHT*2:IPHONE_HEIGHT- BAR_HEIGHT;
     self.contentHeight = toolBarY;
     // TableView

@@ -39,9 +39,9 @@
     
     btnFrame = CGRectMake((IPHONE_WIDTH - 284)/2,10 ,284, 42);
     //加入购物车按钮
-    self.addBtn = [self createButton:btnFrame title:@"查看详情" normalImage:@"pay_button_normal" hightlightImage:@"pay_button_normal" controller:self selector:@selector(buttonClick:) tag:ZERO];
-    [_addBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-    [_addBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateHighlighted];
+    self.addBtn = [self createButton:btnFrame title:@"查看详情" normalImage:@"pay_button_normal" hightlightImage:@"pay_button_pressed" controller:self selector:@selector(buttonClick:) tag:ZERO];
+    [_addBtn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+    [_addBtn setTitleColor:[UIColor blackColor] forState:UIControlStateHighlighted];
     [button4bg addSubview:_addBtn];
     
     //pageController
@@ -71,11 +71,16 @@
     caterInfo.textColor = [UIColor blackColor];
     [bgViewBg addSubview:caterInfo];
     
+    NSString *text = @"俏江南LOGO中的脸谱取自于川剧变脸人物刘宗敏，他是李自成手下的大将军，勇猛彪捍，机智过人，被民俏江南LOGO[1]间百姓誉为武财神，寓意招财进宝，驱恶辟邪，而俏江南选用经过世界著名平面设计大师再创作的此脸谱为公司LOGO，旨在用现代的精神去继承和光大中国五千年悠久的美食文化，并在公司成长过程中通过智慧，勇气，意志力去打造中国餐饮行业的世界品牌。";
     //介绍内容
     textView=[[[UITextView alloc] initWithFrame:CGRectMake(20,labelHeight+3,IPHONE_WIDTH - 40, bgViewBg.frame.size.height - 2*labelHeight)] autorelease];
     textView.editable = NO;
     textView.showsVerticalScrollIndicator = NO;
-    textView.text = @"俏江南LOGO中的脸谱取自于川剧变脸人物刘宗敏，他是李自成手下的大将军，勇猛彪捍，机智过人，被民俏江南LOGO[1]间百姓誉为武财神，寓意招财进宝，驱恶辟邪，而俏江南选用经过世界著名平面设计大师再创作的此脸谱为公司LOGO，旨在用现代的精神去继承和光大中国五千年悠久的美食文化，并在公司成长过程中通过智慧，勇气，意志力去打造中国餐饮行业的世界品牌。";
+    textView.scrollEnabled =  NO;
+    if (text.length > 50) {
+        text = [text substringToIndex:50];
+    }
+    textView.text = text;
     [textView.layer setShadowColor:[UIColor whiteColor].CGColor];
     [textView.layer setShadowOffset:CGSizeMake(.6, .6)];
     [textView setBackgroundColor:[UIColor clearColor]];

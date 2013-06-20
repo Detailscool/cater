@@ -9,7 +9,13 @@
 #import "BaseViewController.h"
 
 @interface OrderController : BaseViewController
-@property (retain, nonatomic) UISegmentedControl *segController;
-- (IBAction)segChange:(id)sender;
-
+- (IBAction)buttonChange:(id)sender;
+//热菜
+@property (retain, nonatomic)NSMutableArray *reCaiDataArray;
+//冷菜
+@property (retain, nonatomic)NSMutableArray *lengCaiDataArray;
+//汤羹
+@property (retain, nonatomic)NSMutableArray *tanggenDataArray;
+//其他
+@property (retain, nonatomic)NSMutableArray *otherDataArray;
 @end

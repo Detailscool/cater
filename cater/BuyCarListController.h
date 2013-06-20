@@ -8,7 +8,9 @@
 
 #import "BaseListController.h"
 
-@interface BuyCarListController : BaseListController
+@interface BuyCarListController : BaseListController{
+      BOOL firstRender;
+}
 @property (assign,nonatomic)BaseViewController *controller;
 -(id) initWithFrame:(CGRect)frame;
 //向controller发送消息

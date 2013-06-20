@@ -9,6 +9,7 @@
 #import "BaseViewController.h"
 
 @interface ClassicDishController : BaseViewController<UIScrollViewDelegate>
+@property (retain, nonatomic)NSMutableArray *cpArray ;
 @property (retain, nonatomic) IBOutlet UIScrollView *scrollView;
 @property (retain, nonatomic) UIButton *addBtn;
 //当前显示经典菜品的index
