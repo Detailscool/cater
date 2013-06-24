@@ -100,11 +100,7 @@
             [self.navigationController pushViewController:[self getControllerFromClass:@"AlertPassWordController" title:@"修改密码"] animated:YES];
         }
     } else if(section == 2){
-        if (row == 0) { //退出登录
-            UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"是否退出登录？" message:nil delegate:self cancelButtonTitle:@"否" otherButtonTitles:@"是", nil];
-            [alertView show];
-            [alertView release];
-        }
+        
     } else if (section == 0){
         if (row == 0) { //订单管理
             [self.navigationController pushViewController:[self getControllerFromClass:@"OrderManagerController" title:@"订单管理"] animated:YES];
@@ -117,9 +113,15 @@
 }
 #pragma mark - UIAlertViewDelegate方法
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex{
-    if (buttonIndex == 1) {
-        //退出登录
+    if (buttonIndex == 1) {//退出登录
+        
     }
+}
+//退出登录
+-(void)logout{
+    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"是否退出登录？" message:nil delegate:self cancelButtonTitle:@"否" otherButtonTitles:@"是", nil];
+    [alertView show];
+    [alertView release];
 }
 //进入修改资料界面
 -(void)buttonClick:(UIButton *)button{

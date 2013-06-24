@@ -11,6 +11,7 @@
 #import "BaseViewController.h"
 #import "BaseListController.h"
 #import "BaseTableViewController.h"
+#import "CustomeButton.h"
 @implementation UIViewController (Strong)
 #pragma mark - 公共的生命周期方法
 - (void)registerObserver{
@@ -98,6 +99,27 @@
     UIButton *button = [[[UIButton alloc] initWithFrame:frame] autorelease];
     
  
+    if (![title stringNull]) {
+        [button setTitle:title forState:UIControlStateNormal];
+        [button setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+    }
+    if (![normalImage stringNull]) {
+        [button setBackgroundImage:[UIImage imageWithContentsOfFile:[normalImage imageFullPath]] forState:UIControlStateNormal];
+    }
+    if (![hightLightImage stringNull]) {
+        [button setBackgroundImage:[UIImage imageWithContentsOfFile:[hightLightImage imageFullPath]] forState:UIControlStateHighlighted];
+    }
+    if (controller) {
+        [button addTarget:controller action:selector forControlEvents:UIControlEventTouchUpInside];
+    }
+    button.tag = tag;
+    return button;
+}
+#pragma mark - 创建button
+- (CustomeButton *)createCustomeButton:(CGRect)frame title:(NSString *)title normalImage:(NSString *)normalImage hightlightImage:(NSString *)hightLightImage controller:(UIViewController *)controller selector:(SEL)selector tag:(int)tag{
+    CustomeButton *button = [[[CustomeButton alloc] initWithFrame:frame] autorelease];
+    
+    
     if (![title stringNull]) {
         [button setTitle:title forState:UIControlStateNormal];
         [button setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];

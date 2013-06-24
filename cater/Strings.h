@@ -70,3 +70,4 @@
 #define ID @"id"
 #define IMAGE_URL @"imageUrl"
 #define CP_INFO @"info"
+#define CURRENT_PRICE @"currentPrice"

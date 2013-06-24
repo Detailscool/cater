@@ -9,6 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "BaseViewController.h"
 #import "HttpUtil.h"
+#import "CustomeButton.h"
 #import "WebController.h"
 @interface UIViewController (Strong)<ASIHTTPRequestDelegate, WebDelegate>
 //创建button
@@ -22,4 +23,6 @@
 -(UILabel *)createLabel:(CGRect)cgRect text:(NSString *)labelText bgColor:(UIColor*)labelBgColor alignment:(UITextAlignment)align font:(UIFont *)_font line:(int)line;
 #pragma mark - 创建textfield
 - (UITextField *)createTextField:(CGRect)frame text:(NSString *)text tag:(int) tag font:(UIFont *)font;
+#pragma mark - 创建button
+- (CustomeButton *)createCustomeButton:(CGRect)frame title:(NSString *)title normalImage:(NSString *)normalImage hightlightImage:(NSString *)hightLightImage controller:(UIViewController *)controller selector:(SEL)selector tag:(int)tag;
 @end

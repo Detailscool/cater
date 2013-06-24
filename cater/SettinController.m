@@ -24,7 +24,7 @@
     self.tableView.backgroundColor = kGlobalBackgroundColor;
     self.tableView.backgroundView =nil;
     
-    dictionary = [[NSMutableDictionary alloc] initWithObjectsAndKeys:[NSArray arrayWithObjects: @"意见",@"帮助",nil],int2str(0),[NSArray arrayWithObjects:@"更新",@"关于", nil],int2str(1),[NSArray arrayWithObjects:@"皮肤", nil],int2str(2), nil];
+    dictionary = [[NSMutableDictionary alloc] initWithObjectsAndKeys:[NSArray arrayWithObjects:@"分享", @"意见",@"帮助",nil],int2str(0),[NSArray arrayWithObjects:@"更新",@"关于", nil],int2str(1),[NSArray arrayWithObjects:@"皮肤", nil],int2str(2), nil];
 }
 #pragma mark - 实现父类的方法
 - (NSInteger)numberOfSections{
@@ -43,7 +43,10 @@
     int row = indexPath.row;
     NSString *title = nil;
     NSString *controllerString = nil;
-    if (section == 0 && row == 0) { //意见
+    if (section == 0 && row == 0) { //分享
+        controllerString = @"SuggestionController";
+        title = @"分享";
+    }else if (section == 0 && row == 1){ //意见
         controllerString = @"SuggestionController";
         title = @"意见";
     }else if (section == 0 && row == 1){ //帮助
@@ -71,7 +74,7 @@
     cell.textLabel.backgroundColor = [UIColor clearColor];
     cell.detailTextLabel.backgroundColor = [UIColor clearColor];
     
-//    cell.backgroundColor = [Common colorWithHexString:@"0X00000ff"];
+    cell.backgroundColor = [Common colorWithHexString:@"eeeeee"];
     
     cell.selectionStyle = UITableViewCellSelectionStyleBlue;
     cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;

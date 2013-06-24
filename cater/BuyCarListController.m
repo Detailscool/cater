@@ -13,7 +13,8 @@
 #import "MyTableViewCell.h"
 #import "CustomeButton.h"
 @interface BuyCarListController (){
-   
+    //确定下单
+    UIButton *cormformButton;
 }
 @end
 
@@ -67,12 +68,15 @@
         firstRender = YES;
         int height = self.cellHeight * self.numberOfRows;
         int selfViewHeight = self.view.frame.size.height;
-        
-        UIButton *button =  [self createButton:CGRectMake(0,height+10,IPHONE_WIDTH - 40, BAR_HEIGHT) title:@"确定下单" normalImage:@"pay_button_normal" hightlightImage:@"pay_button_pressed" controller:self selector:@selector(btnClick:) tag:ZERO];
-        [button setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-        [button setTitleColor:[UIColor whiteColor] forState:UIControlStateHighlighted];
-        [self.tableView addSubview:button];
-        
+        CGRect buttonFrame = CGRectMake(0,height+10,IPHONE_WIDTH - 40, BAR_HEIGHT);
+        if (!cormformButton) {
+            cormformButton =  [self createButton:buttonFrame title:@"确定下单" normalImage:@"pay_button_normal" hightlightImage:@"pay_button_pressed" controller:self selector:@selector(btnClick:) tag:ZERO];
+            [cormformButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+            [cormformButton setTitleColor:[UIColor whiteColor] forState:UIControlStateHighlighted];
+            [self.tableView addSubview:cormformButton];
+        } else {
+            cormformButton.frame = buttonFrame;
+        }
         height += 64;
         self.tableView.contentSize = CGSizeMake(self.tableView.frame.size.width, height);
         if (height > selfViewHeight) {

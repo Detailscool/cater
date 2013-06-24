@@ -19,4 +19,6 @@
 @property (retain, nonatomic) IBOutlet UILabel *currentPrice;
 
 - (IBAction)buttonClick:(id)sender;
+
+@property (retain, nonatomic) NSMutableDictionary *dictionary;
 @end

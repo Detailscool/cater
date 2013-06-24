@@ -10,6 +10,7 @@
 #import "NSString+Strong.h"
 #import "UserDataManager.h"
 #import "UIViewController+Strong.h"
+#import "iToast.h"
 @interface TgouInfoController (){
     //购物车
     UIBarButtonItem *buyCar;
@@ -19,7 +20,7 @@
 @end
 
 @implementation TgouInfoController
-
+@synthesize dictionary = _dictionary;
 - (void)afterLoadView{
     [super afterLoadView];
     
@@ -28,12 +29,16 @@
     CGRect infoLabelFrame = _infoLabel.frame;
     UIFont *font = [UIFont systemFontOfSize:15];
     
-    NSString *infoString = @"俏江南LOGO中的脸谱取自于川剧变脸人物刘宗敏，他是李自成手下的大将军，勇猛彪捍，机智过人，被民俏江南LOGO[1]间百姓誉为武财神，寓意招财进宝，驱恶辟邪，而俏江南选用经过世界著名平面设计大师再创作的此脸谱为公司LOGO，旨在用现代的精神去继承和光大中国五千年悠久的美食文化，并在公司成长过程中通过智慧，勇气，意志力去打造中国餐饮行业的世界品牌。";
+    NSString *infoString = [_dictionary objectForKey:CP_INFO];
     
     CGSize labelSize = [self getSizeFromString: infoString width:infoLabelFrame.size.width font:font];
     _infoLabel.frame = CGRectMake(infoLabelFrame.origin.x, infoLabelFrame.origin.y, labelSize.width, labelSize.height);
     _infoLabel.text = infoString;
     
+    //原价
+    _orginalPrice.text = [_dictionary objectForKey:PRICE];
+    //现价
+    _currentPrice.text = [_dictionary objectForKey:CURRENT_PRICE];
     
     CGRect btnFrame = _addBtn.frame;
     _addBtn.frame = CGRectMake(btnFrame.origin.x, _infoLabel.frame.origin.y + _infoLabel.frame.size.height+ 10, btnFrame.size.width, btnFrame.size.height);
@@ -58,9 +63,19 @@
         [orderButton release];
     }
 }
+
+- (void)deleteCarSuccess:(NSNotification *)note{
+    int count = [UserDataManager totalCount];
+    if (count == ZERO) {
+        buyCar = nil;
+        orderButton = [[UIBarButtonItem alloc] initWithTitle:@"我要点菜" style:UIBarButtonItemStylePlain target:self
+                                                      action:@selector(barButtonItemClick:)];
+        self.navigationItem.rightBarButtonItem = orderButton;
+    }
+}
 //成功添加菜品到购物车
 - (void)addCarSuccess:(NSNotification *)note{
-    int count = [UserDataManager sharedWebController].loadBuyCarData.count;
+    int count = [UserDataManager totalCount];
     orderButton = nil;
     buyCar = nil;
     self.navigationItem.rightBarButtonItem = nil;
@@ -81,7 +96,6 @@
 }
 -(void)barButtonItemClick:(UIBarButtonItem *)item{
     if (item == buyCar) {
-        
         [self.navigationController pushViewController:[self getControllerFromClass:@"BuyCarController" title:@"购物车"] animated:YES];
     } else if(item == orderButton){
         [self.navigationController pushViewController:[self getControllerFromClass:@"OrderController" title:@"我要点菜"] animated:YES];
@@ -89,9 +103,16 @@
 }
 //加入购物车
 - (IBAction)buttonClick:(id)sender {
-   [[UserDataManager sharedWebController] addBuyCarData:[NSMutableDictionary dictionaryWithCapacity:2]] ;
+    NSString *key = [_dictionary objectForKey:KEY];
+    if ([UserDataManager isIntBuyCar:key]) {
+        [[iToast makeText:@"该菜品已经加入购物车"] show:iToastTypeWarnning ];
+    } else {
+        NSLog(@"addBuyCarData key = %@",key);
+        [[UserDataManager sharedWebController] addBuyCarData:_dictionary] ;
+    }
 }
 - (void)dealloc {
+    [_dictionary release];
     [_scrollView release];
     [_imageButton release];
     [_addBtn release];

@@ -8,6 +8,7 @@
 
 #import "MyUITableView.h"
 #import <QuartzCore/QuartzCore.h>
+#import "NSString+Strong.h"
 @implementation MyUITableView
 @synthesize controller;
 @synthesize dataArray = _dataArray;
@@ -109,23 +110,31 @@
         }
         if (_dataArray && [controller respondsToSelector:@selector(createChildView4Cell:indexPath:)]) {
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
-            
             [controller performSelector:@selector(createChildView4Cell:indexPath:) withObject:cell withObject:indexPath];
         } else {
             cell.detailTextLabel.backgroundColor = [UIColor clearColor];
             if ([cell.textLabel.text isEqualToString:@"退出登录"]) {
-                UIView *bgView = [[[UIView alloc] initWithFrame:cell.frame] autorelease];
-                bgView.layer.cornerRadius = 10.0f;
+                UIButton *button = [[[UIButton alloc] initWithFrame:CGRectMake(ZERO,ZERO,300,BAR_HEIGHT)] autorelease];
+                [button setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+                [button setTitle:@"退出登录" forState:UIControlStateNormal];
+                 [button setBackgroundImage:[UIImage imageWithContentsOfFile:[@"pay_button_normal" imageFullPath]] forState:UIControlStateNormal];
+                [button setBackgroundImage:[UIImage imageWithContentsOfFile:[@"pay_button_pressed" imageFullPath]] forState:UIControlStateHighlighted];
+                button.titleLabel.font = [UIFont systemFontOfSize:20];
+                [button addTarget:controller action:@selector(logout) forControlEvents:UIControlEventTouchUpInside];
+                [cell.contentView addSubview:button];
                 
-                
-                cell.selectedBackgroundView =bgView;
-                cell.selectedBackgroundView.backgroundColor = [Common colorWithHexString:@"FF6633"];
-                
-                cell.backgroundColor = [Common colorWithHexString:@"dd0000"];
-               
-                cell.textLabel.textColor = [UIColor blackColor];
-                cell.textLabel.font = [UIFont systemFontOfSize:20];
-                cell.textLabel.textAlignment = NSTextAlignmentCenter;
+//                UIView *bgView = [[[UIView alloc] initWithFrame:cell.frame] autorelease];
+//                bgView.layer.cornerRadius = 10.0f;
+//                
+//                
+//                cell.selectedBackgroundView =bgView;
+//                cell.selectedBackgroundView.backgroundColor = [Common colorWithHexString:@"FF6633"];
+//                
+//                cell.backgroundColor = [Common colorWithHexString:@"dd0000"];
+//               
+//                cell.textLabel.textColor = [UIColor blackColor];
+//                cell.textLabel.font = [UIFont systemFontOfSize:20];
+//                cell.textLabel.textAlignment = NSTextAlignmentCenter;
             } else {
                 cell.selectionStyle = UITableViewCellSelectionStyleBlue;
                 cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;

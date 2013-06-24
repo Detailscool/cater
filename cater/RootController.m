@@ -31,9 +31,9 @@
     titleView.textColor = [UIColor whiteColor];
     self.navigationItem.titleView = titleView;
     //商家logo
-    UIButton *infoBtn = [self createButton:CGRectMake(20,5, 60, 30) title:nil normalImage:@"jj_logo" hightlightImage:@"jj_logo" controller:nil selector:nil tag:ZERO];
-    infoBtn.layer.cornerRadius = 5.0f;
-    infoBtn.layer.masksToBounds = YES;
+    UIButton *infoBtn = [self createButton:CGRectMake(ZERO,5, 81, 30) title:nil normalImage:@"jnc_logo" hightlightImage:@"jnc_logo" controller:nil selector:nil tag:ZERO];
+//    infoBtn.layer.cornerRadius = 5.0f;
+//    infoBtn.layer.masksToBounds = YES;
     
     UIBarButtonItem *logo = [[UIBarButtonItem alloc] initWithCustomView:infoBtn];
     self.navigationItem.leftBarButtonItem = logo;
